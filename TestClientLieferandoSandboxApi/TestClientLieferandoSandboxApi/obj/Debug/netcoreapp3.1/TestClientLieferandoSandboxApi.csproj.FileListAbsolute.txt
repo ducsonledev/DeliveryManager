@@ -1,0 +1,14 @@
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\bin\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.exe
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\bin\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.deps.json
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\bin\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.runtimeconfig.json
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\bin\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.runtimeconfig.dev.json
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\bin\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.dll
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\bin\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.pdb
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\obj\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.csproj.AssemblyReference.cache
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\obj\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\obj\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.AssemblyInfoInputs.cache
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\obj\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.AssemblyInfo.cs
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\obj\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.csproj.CoreCompileInputs.cache
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\obj\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.dll
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\obj\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.pdb
+C:\Users\Son\source\repos\TestClientLieferandoSandboxApi\TestClientLieferandoSandboxApi\obj\Debug\netcoreapp3.1\TestClientLieferandoSandboxApi.genruntimeconfig.cache
