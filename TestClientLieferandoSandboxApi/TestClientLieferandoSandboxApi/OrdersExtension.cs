@@ -13,10 +13,10 @@ namespace TestClientLieferandoSandboxApi
             List<OwnOrders> listOfOwnOrders = new List<OwnOrders>();
             foreach (var order in lieferandoOrders.orders)
             {
-                List<ListProductOrder> listOfproducts = new List<ListProductOrder>();
+                var listOfproducts = new OwnProductOrders();
                 foreach (var product in order.products)
                 {
-                    var newProduct = new ListProductOrder
+                    var newProduct = new OwnProduct
                     {
                         status = "INPROGRESS", // what are other status?
                         categoryDesc = product.category,
@@ -24,13 +24,13 @@ namespace TestClientLieferandoSandboxApi
                         secondPrintAt = "EPSON TM-T82 Receipt", // not provided from Lieferando API
                         productType = "PRODUCT", // not provided
                         productName = product.name,
-                        productId = Int16.Parse(product.id),
+                        productId = 1, //int.Parse(product.id),
                         groupName = "Küche", // not provided
                         productArticalNumber = "1", // not provided
                         printAt = "PRINTKITCHEN", // not provided
                         tableId = 0, // not provided
                         signatureCount = -1, // not provided
-                        orderId = Int32.Parse(order.id),
+                        orderId = 0, //Int32.Parse(order.id),
                         categoryId = 2, // not provided
                         groupId = 1, // not provided
                         index = 0, // not provided
@@ -56,7 +56,8 @@ namespace TestClientLieferandoSandboxApi
                         // missing information provided by Lieferando API that is not used in for our API:
                         // - (not mandatory) sideDishes (and its id), remark
                     };
-                    listOfproducts.Add(newProduct);
+                    listOfproducts.listOwnProductOrders = new List<OwnProduct>();
+                    listOfproducts.listOwnProductOrders.Add(newProduct);
                 }
 
                 var newOrder = new OwnOrders
@@ -67,15 +68,16 @@ namespace TestClientLieferandoSandboxApi
                     user = "1",
                     zdata = new Zdata
                     {
-                        customer = {
+                        customer = new newCustomer
+                        {
                             customerName = order.customer.name,
                             customerCompany = order.customer.companyName,
                             customerPhone = order.customer.phoneNumber,
                             customerCode = order.customer.postalCode,
-                            customerCity =order.customer.city,
+                            customerCity = order.customer.city,
                             customerAddress = order.customer.street,
-                            customerMail = "tungnm.ptit@gmail.com",
-                            customerType = "ECONOMIC",
+                            customerMail = "tungnm.ptit@gmail.com", // not provided
+                            customerType = "ECONOMIC", // not provided
                             id = 1
                             // missing information provided by Lieferando API that is not used in for our API:
                             // - (not mandatory) extraAddressInfo

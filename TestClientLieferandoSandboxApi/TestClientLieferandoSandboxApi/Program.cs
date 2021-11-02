@@ -19,7 +19,7 @@ namespace TestClientLieferandoSandboxApi
         //}
         //  
 
-        // Model for JSON from Cash System API
+        // Model for JSON from Server API
         public class newCustomer
         {
             public string customerName { get; set; }
@@ -35,7 +35,7 @@ namespace TestClientLieferandoSandboxApi
             public int id { get; set; }
         }
 
-        public class ListProductOrder
+        public class OwnProduct
         {
             public string status { get; set; }
             public string categoryDesc { get; set; }
@@ -73,10 +73,15 @@ namespace TestClientLieferandoSandboxApi
             public int allowChangeTax { get; set; }
         }
 
+        public class OwnProductOrders
+        {
+            public List<OwnProduct> listOwnProductOrders { get; set; }
+        }
+
         public class Zdata
         {
             public newCustomer customer { get; set; }
-            public List<ListProductOrder> listProductOrders { get; set; }
+            public OwnProductOrders listProductOrders { get; set; }
             public string waiter { get; set; }
         }
 
@@ -164,18 +169,19 @@ namespace TestClientLieferandoSandboxApi
 
         static void Main(string[] args)
         {
-            TimeSpan interval = new TimeSpan(0, 1, 0);
-
             var byteArray = Encoding.ASCII.GetBytes("test-username-123:test-password-123");
             var clientGet = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567");
-            clientGet.Timeout = -1;
+            //clientGet.Timeout = -1;
             var requestGetOrd = new RestRequest(Method.GET);
             requestGetOrd.AddHeader("content-type", "application/json");
             requestGetOrd.AddHeader("Apikey", "abc123");
             requestGetOrd.AddHeader("Authorization", "Basic " + Convert.ToBase64String(byteArray));
 
-            var clientPost = new RestClient("<server-base-adresse>:13000"); // TODO: Please add server adresse with Port 13000.
+            //var clientPost = new RestClient("<server-base-adresse>:13000"); // TODO: Please add server adresse with Port 13000.
+            var clientPost = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567");
             var requestPostOrd = new RestRequest(Method.POST);
+
+            TimeSpan interval = new TimeSpan(0, 1, 0);
             while (true)
             {
                 IRestResponse responseGet = clientGet.Execute(requestGetOrd);
@@ -183,10 +189,11 @@ namespace TestClientLieferandoSandboxApi
 
                 var newLieferandoOrders = JsonConvert.DeserializeObject<LieferandoOrders>(responseGet.Content);
                 var ownOrders = newLieferandoOrders.ToOwnOrder();
-                var newOwnOrders = JsonConvert.SerializeObject(ownOrders, Formatting.Indented);
 
-                foreach (var newOwnOrder in newOwnOrders)
+                // sending orders seperately for now
+                foreach (var ownOrder in ownOrders)
                 {
+                    var newOwnOrder = JsonConvert.SerializeObject(ownOrder, Formatting.Indented);
                     IRestResponse responsePost = clientPost.Execute(requestPostOrd.AddJsonBody(newOwnOrder));
                     Console.WriteLine(responsePost.Content);
                 }
