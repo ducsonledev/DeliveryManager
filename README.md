@@ -1,2 +1,3 @@
 # aimIT
-Testing Scripts
+
+Background Application for Requesting Orders from Lieferando Api
