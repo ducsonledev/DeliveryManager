@@ -14,6 +14,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             InitializeComponent();
             backgroundWorker.WorkerReportsProgress = true;
             backgroundWorker.WorkerSupportsCancellation = true;
+            // TODO: passed credentials from login form
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
