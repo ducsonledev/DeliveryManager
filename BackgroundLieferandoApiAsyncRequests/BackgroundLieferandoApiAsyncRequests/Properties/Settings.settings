@@ -1,7 +1,30 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="BackgroundLieferandoApiAsyncRequests.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="secondPrintAt" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">EPSON TM-T82 Receipt</Value>
+    </Setting>
+    <Setting Name="PrintAt" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PRINTKITCHEN</Value>
+    </Setting>
+    <Setting Name="CategoryId" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="Tax" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">0.23</Value>
+    </Setting>
+    <Setting Name="TaxRate" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">0.07</Value>
+    </Setting>
+    <Setting Name="AllowChangeTax" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="CustomerMail" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tungnm.ptit@gmail.com</Value>
+    </Setting>
+    <Setting Name="CustomerType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ECONOMIC</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>

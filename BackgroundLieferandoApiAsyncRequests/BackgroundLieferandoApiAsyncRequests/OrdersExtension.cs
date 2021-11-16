@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using static BackgroundLieferandoApiAsyncRequests.LieferandoApiRequester;
+// TODO: import app settings to fill out rest of the missing properties
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
@@ -13,46 +14,48 @@ namespace BackgroundLieferandoApiAsyncRequests
             foreach (var order in lieferandoOrders.orders)
             {
                 var listOfproducts = new OwnProductOrders();
+                int productIdx = 1;
                 foreach (var product in order.products)
                 {
                     var newProduct = new OwnProduct
                     {
-                        status = "INPROGRESS", // what are other status?
+                        status = "INPROGRESS", // what are other status in our API? TODO: status updates to Lieferando API?
                         categoryDesc = product.category,
                         categoryName = product.category,
-                        secondPrintAt = "EPSON TM-T82 Receipt", // not provided from Lieferando API
-                        productType = "PRODUCT", // not provided
+                        secondPrintAt = Properties.Settings.Default.secondPrintAt, // TODO: depending on category 
+                        productType = "PRODUCT", // always "PRODUCT"
                         productName = product.name,
                         productId = 1, //int.Parse(product.id),
-                        groupName = "Küche", // not provided
-                        productArticalNumber = "1", // not provided
-                        printAt = "PRINTKITCHEN", // not provided
-                        tableId = 0, // not provided
-                        signatureCount = -1, // not provided
-                        orderId = 0, //Int32.Parse(order.id),
-                        categoryId = 2, // not provided
-                        groupId = 1, // not provided
-                        index = 0, // not provided
-                        isLine = false, // not provided
-                        editIndex = 0, // not provided
+                        groupName = "Küche", // always "Küche"
+                        productArticalNumber = product.id, // same as product id
+                                                           // if product id in database == product.id
+                        printAt = Properties.Settings.Default.PrintAt, // TODO: from config depending on category 
+                        tableId = 0, // always 0
+                        signatureCount = 0, // always 0
+                        orderId = 0, // int.Parse(order.id),
+                        categoryId = Properties.Settings.Default.CategoryId, // TODO: from config depending on category
+                        groupId = 1, // always 1
+                        index = productIdx++, // incremental from 1 to n, each order
+                        isLine = false, // always false
+                        editIndex = 0, // always 0
                         productPrice = product.price,
-                        discountRate = 0.0, // only from order.discounts but in an array
+                        discountRate = 0.0, // always 0.0 until we have some
                         quantity = product.count,
-                        discount = 0.0, // only from order.discounts but in an array
-                        makedKitchen = 0, // not provided
-                        numCus = 1, // not provided
-                        border = 0, // not provided, what is it for?
+                        discount = 0.0, // always 0.0 until we have some
+                        makedKitchen = 0, // always 0
+                        numCus = 1, // always 1
+                        border = 0, // always 0
                         money = product.price,
-                        tablePos = 0, // not provided, delivery?
-                        tax = 0.23, // not provided
-                        taxRate = 0.07, // standard delivery tax
-                        totalDiscount = 0.0, // only from as an array from order.discounts which is in fact
-                                             // totalDiscount but for full order not just one product
-                        totalMoney = product.price, // why so many different price tags?
-                        totalTax = 0.23, // not provided
-                        transferToKitchen = 0, // not provided
-                        allowChangeTax = 1 // not provided
-                        // missing information provided by Lieferando API that is not used in for our API:
+                        tablePos = 0, // always 0
+                        tax = Properties.Settings.Default.Tax, // TODO: from config depending on product id
+                        taxRate = Properties.Settings.Default.TaxRate, // TODO: from config file depend of product id
+                        totalDiscount = 0.0, // always 0.0 until we have some
+                        totalMoney = product.price,
+                        totalTax = product.count * Properties.Settings.Default.Tax, // =quantity*tax (tax, TODO: from config depending on product id)
+                                                                                    // if product id in database == product.id 
+                        transferToKitchen = 0, // always 0
+                        allowChangeTax = Properties.Settings.Default.AllowChangeTax, // TODO: from config file depend of product id
+                        // missing information provided by Lieferando API that is not used in our API:
                         // - (not mandatory) sideDishes (and its id), remark
                     };
                     listOfproducts.listOwnProductOrders = new List<OwnProduct>();
@@ -67,7 +70,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                     user = "1",
                     zdata = new Zdata
                     {
-                        customer = new newCustomer
+                        customer = new ownCustomer
                         {
                             customerName = order.customer.name,
                             customerCompany = order.customer.companyName,
@@ -78,7 +81,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                             customerMail = "tungnm.ptit@gmail.com", // not provided
                             customerType = "ECONOMIC", // not provided
                             id = 1
-                            // missing information provided by Lieferando API that is not used in for our API:
+                            // missing information provided by Lieferando API that is not used in our API:
                             // - (not mandatory) extraAddressInfo
                         },
                         listProductOrders = listOfproducts,

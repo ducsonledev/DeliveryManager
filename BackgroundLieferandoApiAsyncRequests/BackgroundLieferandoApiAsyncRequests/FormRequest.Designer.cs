@@ -32,45 +32,46 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.btnStart = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.progressBarRequest = new System.Windows.Forms.ProgressBar();
-            this.label1 = new System.Windows.Forms.Label();
+            this.labelRequest = new System.Windows.Forms.Label();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(12, 92);
+            this.btnStart.Location = new System.Drawing.Point(60, 174);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.Size = new System.Drawing.Size(113, 23);
             this.btnStart.TabIndex = 0;
-            this.btnStart.Text = "Start";
+            this.btnStart.Text = "Start Request";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.button1_Click);
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(248, 92);
+            this.btnCancel.Location = new System.Drawing.Point(296, 174);
             this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.Size = new System.Drawing.Size(113, 23);
             this.btnCancel.TabIndex = 1;
-            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Text = "Cancel Request";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // progressBarRequest
             // 
-            this.progressBarRequest.Location = new System.Drawing.Point(12, 44);
+            this.progressBarRequest.Location = new System.Drawing.Point(60, 126);
             this.progressBarRequest.Name = "progressBarRequest";
-            this.progressBarRequest.Size = new System.Drawing.Size(311, 23);
+            this.progressBarRequest.Size = new System.Drawing.Size(349, 23);
             this.progressBarRequest.TabIndex = 2;
             // 
-            // label1
+            // labelRequest
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 18);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(173, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Processing new incoming requests:";
+            this.labelRequest.AutoSize = true;
+            this.labelRequest.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.labelRequest.Location = new System.Drawing.Point(57, 91);
+            this.labelRequest.Name = "labelRequest";
+            this.labelRequest.Size = new System.Drawing.Size(107, 13);
+            this.labelRequest.TabIndex = 3;
+            this.labelRequest.Text = "Running Requests ...";
             // 
             // backgroundWorker
             // 
@@ -84,8 +85,9 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 191);
-            this.Controls.Add(this.label1);
+            this.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.ClientSize = new System.Drawing.Size(475, 318);
+            this.Controls.Add(this.labelRequest);
             this.Controls.Add(this.progressBarRequest);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnStart);
@@ -101,7 +103,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.ProgressBar progressBarRequest;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelRequest;
         private System.ComponentModel.BackgroundWorker backgroundWorker;
     }
 }

@@ -18,7 +18,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         //  
 
         // Model for JSON from Server API
-        public class newCustomer
+        public class ownCustomer
         {
             public string customerName { get; set; }
             public string customerCompany { get; set; }
@@ -78,7 +78,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         public class Zdata
         {
-            public newCustomer customer { get; set; }
+            public ownCustomer customer { get; set; }
             public OwnProductOrders listProductOrders { get; set; }
             public string waiter { get; set; }
         }
