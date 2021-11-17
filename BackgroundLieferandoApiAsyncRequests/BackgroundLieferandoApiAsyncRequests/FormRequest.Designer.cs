@@ -38,6 +38,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             // btnStart
             // 
+            this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStart.Location = new System.Drawing.Point(60, 174);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(113, 23);
@@ -48,6 +49,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             // btnCancel
             // 
+            this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.Location = new System.Drawing.Point(296, 174);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(113, 23);

@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace BackgroundLieferandoApiAsyncRequests
@@ -181,11 +182,12 @@ namespace BackgroundLieferandoApiAsyncRequests
         //    [JsonProperty("orders")]
         //    public string List<Order> Orders { get; set; }
         //}
-        public static IRestResponse LieferandoApiGetRequest(string apiCode, string username, string password)
-        {
 
-            return null;
-        }
+        //public static IRestResponse LieferandoApiGetRequest(string apiCode, string username, string password)
+        //{
+
+        //    return null;
+        //}
 
 
         public static List<OwnOrders> LieferandoRequest (string username, string password) // later parameter int restaurantId
@@ -201,10 +203,19 @@ namespace BackgroundLieferandoApiAsyncRequests
             //var clientPost = new RestClient("<server-base-adresse>:13000"); 
             //var clientPost = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567"); // TODO later: Please add server adresse with Port 13000.
             //var requestPostOrd = new RestRequest(Method.POST);
-         
-            IRestResponse responseGet = clientGet.Execute(requestGetOrd);
 
-            var newLieferandoOrders = JsonConvert.DeserializeObject<LieferandoOrders>(responseGet.Content);
+            //IRestResponse responseGet = clientGet.Execute(requestGetOrd); // Currently ERROR STATUS CODE 530
+            
+            string json;
+            // Sorry for hardcoded path, it's just for testing purposes for now, since https://sandbox-pull-posapi.takeaway.com as of now is currently not available.
+            // I contacted Lieferando-Support regarding that problem, I hope, they resolve that soon.
+            // Get Request are Status Code 530 right now which does not give orders.
+            using (StreamReader r = new StreamReader("C:/Users/Son/Desktop/Arbeitsplatz/AIM/aimIT/BackgroundLieferandoApiAsyncRequests/BackgroundLieferandoApiAsyncRequests/LieferandoSandboxOrders.json"))
+            {
+                json = r.ReadToEnd();
+            }
+            
+            var newLieferandoOrders = JsonConvert.DeserializeObject<LieferandoOrders>(json); // responseGet.Content // Currently ERROR STATUS CODE 530
             var ownOrders = newLieferandoOrders.ToOwnOrder();
 
             // sending orders seperately for now

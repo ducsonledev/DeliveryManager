@@ -17,6 +17,9 @@ namespace BackgroundLieferandoApiAsyncRequests
                 int productIdx = 1;
                 foreach (var product in order.products)
                 {
+                    // ids cannot be null
+                    int.TryParse(product.id, out int LieferandoProductId);
+                    int.TryParse(order.id, out int LieferandoOrderId);
                     var newProduct = new OwnProduct
                     {
                         status = "INPROGRESS", // what are other status in our API? TODO: status updates to Lieferando API?
@@ -25,17 +28,16 @@ namespace BackgroundLieferandoApiAsyncRequests
                         secondPrintAt = Properties.Settings.Default.secondPrintAt, // TODO: depending on category 
                         productType = "PRODUCT", // always "PRODUCT"
                         productName = product.name,
-                        productId = 1, //int.Parse(product.id),
+                        productId = LieferandoProductId,
                         groupName = "Küche", // always "Küche"
                         productArticalNumber = product.id, // same as product id
-                                                           // if product id in database == product.id
                         printAt = Properties.Settings.Default.PrintAt, // TODO: from config depending on category 
                         tableId = 0, // always 0
                         signatureCount = 0, // always 0
-                        orderId = 0, // int.Parse(order.id),
+                        orderId = LieferandoOrderId, //0//int.Parse(order.id),
                         categoryId = Properties.Settings.Default.CategoryId, // TODO: from config depending on category
                         groupId = 1, // always 1
-                        index = productIdx++, // incremental from 1 to n, each order
+                        index = productIdx++, // incremental from 1 to n, suffix +1 after each order
                         isLine = false, // always false
                         editIndex = 0, // always 0
                         productPrice = product.price,
@@ -48,6 +50,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                         money = product.price,
                         tablePos = 0, // always 0
                         tax = Properties.Settings.Default.Tax, // TODO: from config depending on product id
+                                                               // if product id in database == product.id
                         taxRate = Properties.Settings.Default.TaxRate, // TODO: from config file depend of product id
                         totalDiscount = 0.0, // always 0.0 until we have some
                         totalMoney = product.price,
@@ -65,7 +68,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 {
                     action = "automaticOrder", // not provided
                     signature = order.orderKey,
-                    time = "26/10/2021 21:15:40",
+                    time = "26/10/2021 21:15:40", // TODO: convert time format
                     user = "1",
                     zdata = new Zdata
                     {

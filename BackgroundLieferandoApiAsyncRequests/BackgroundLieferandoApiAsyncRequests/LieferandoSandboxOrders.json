@@ -1,0 +1,263 @@
+﻿{
+  "orders": [
+    {
+      "orderKey": "D41D8CD98F00B204E9800998ECF8427E",
+      "requestedDeliveryTime": "2017-08-04T19:45:00Z",
+      "orderType": "delivery",
+      "totalPrice": 4,
+      "remark": "Nicht klingeln bitte",
+      "restaurantId": "1234",
+      "version": "1.0",
+      "platform": "Thuisbezorgd.nl",
+      "products": [
+        {
+          "price": 2,
+          "name": "Dikke frieten",
+          "count": 1,
+          "remark": "Extra knapperig aub",
+          "id": "1",
+          "category": "Patatten",
+          "sideDishes": [
+            {
+              "price": 0,
+              "name": "Joppiesaus",
+              "count": 1,
+              "id": "2"
+            }
+          ]
+        },
+        {
+          "price": 1.5,
+          "name": "Pikanto",
+          "count": 1,
+          "id": "3",
+          "category": "Vleisch"
+        }
+      ],
+      "isPaid": "True",
+      "deliveryCosts": 1,
+      "discounts": [
+        {
+          "price": -0.5,
+          "name": "Weekendactie dikke frieten",
+          "count": 1
+        }
+      ],
+      "publicReference": "JK4H8D",
+      "courier": "restaurant",
+      "totalDiscount": 0.5,
+      "paymentMethod": "online",
+      "id": "cae66b7e-791b-11e7-b4d8-3464a91febf3",
+      "orderDate": "2017-08-04T19:15:00Z",
+      "customer": {
+        "phoneNumber": "061234568",
+        "streetNumber": "10",
+        "city": "Enschede",
+        "street": "Brouwerijstraat",
+        "companyName": "PostNL",
+        "postalCode": "7523XD",
+        "name": "Pieter Post",
+        "extraAddressInfo": "floor:2"
+      }
+    },
+    {
+      "orderKey": "144C8232D8B9FA4AFD8815B9F93909B8",
+      "requestedDeliveryTime": "ASAP",
+      "orderType": "delivery",
+      "totalPrice": 34,
+      "remark": "",
+      "restaurantId": "1234",
+      "version": "1.0",
+      "platform": "Thuisbezorgd.nl",
+      "products": [
+        {
+          "price": 29,
+          "name": "Italienischer Abend",
+          "count": 1,
+          "remark": "",
+          "id": "34535",
+          "category": "Italienischer Abend",
+          "sideDishes": [
+            {
+              "price": 1,
+              "name": "Vegan",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 1",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 2",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 3",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Tomato",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "price": 5,
+          "name": "Kebap Dürüm (klein)",
+          "count": 1,
+          "remark": "",
+          "category": "Kebap",
+          "sideDishes": [
+            {
+              "price": 0,
+              "name": "ohne Sauce",
+              "count": 1
+            },
+            {
+              "price": 0,
+              "name": "mit Weizenbrot",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "price": 3,
+          "name": "Apfelsaft",
+          "count": 1,
+          "remark": "",
+          "id": "83",
+          "category": "Säfte",
+          "sideDishes": []
+        }
+      ],
+      "isPaid": "False",
+      "deliveryCosts": 0,
+      "discounts": [
+        {
+          "price": -3,
+          "name": "kebab aktion",
+          "count": 1
+        }
+      ],
+      "publicReference": "13ZLG8",
+      "courier": "external",
+      "totalDiscount": 3,
+      "paymentMethod": "cash",
+      "id": "86676377-9eac-420e-a522-458bac02c9be",
+      "orderDate": "2020-06-10T12:45:22Z",
+      "customer": {
+        "phoneNumber": "061234568",
+        "streetNumber": "10",
+        "city": "Enschede",
+        "street": "Brouwerijstraat",
+        "companyName": "PostNL",
+        "postalCode": "7523XD",
+        "name": "Pieter Post",
+        "extraAddressInfo": "floor:2"
+      }
+    },
+    {
+      "orderKey": "2FE3D67919A2960FD9474F60E2848F92",
+      "requestedDeliveryTime": "ASAP",
+      "orderType": "delivery",
+      "totalPrice": 50.7,
+      "remark": "",
+      "restaurantId": "1234",
+      "version": "1.0",
+      "platform": "Thuisbezorgd.nl",
+      "products": [
+        {
+          "price": 16.9,
+          "name": "Pizza 2",
+          "count": 1,
+          "remark": "",
+          "category": "Pizza",
+          "sideDishes": [
+            {
+              "price": 1,
+              "name": "Vegan",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 1",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 3",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 5",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 8",
+              "count": 1
+            }
+          ]
+        },
+        {
+          "price": 16.9,
+          "name": "Pizza 9",
+          "count": 2,
+          "remark": "",
+          "category": "Pizza",
+          "sideDishes": [
+            {
+              "price": 1,
+              "name": "Vegan",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 1",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 5",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 2",
+              "count": 1
+            },
+            {
+              "price": 2,
+              "name": "Salad mix 4",
+              "count": 1
+            }
+          ]
+        }
+      ],
+      "isPaid": "False",
+      "deliveryCosts": 0,
+      "discounts": [],
+      "publicReference": "07AMHC",
+      "courier": "external",
+      "totalDiscount": 0,
+      "paymentMethod": "cash",
+      "id": "b9b2d648-382e-47c4-b717-27b9f07146b1",
+      "orderDate": "2020-06-10T12:47:35Z",
+      "customer": {
+        "phoneNumber": "061234568",
+        "streetNumber": "10",
+        "city": "Enschede",
+        "street": "Brouwerijstraat",
+        "companyName": "PostNL",
+        "postalCode": "7523XD",
+        "name": "Pieter Post",
+        "extraAddressInfo": "floor:2"
+      }
+    }
+  ]
+}
