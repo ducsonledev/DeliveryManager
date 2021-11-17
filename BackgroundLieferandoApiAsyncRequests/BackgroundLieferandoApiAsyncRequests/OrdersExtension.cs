@@ -58,7 +58,6 @@ namespace BackgroundLieferandoApiAsyncRequests
                         // missing information provided by Lieferando API that is not used in our API:
                         // - (not mandatory) sideDishes (and its id), remark
                     };
-                    listOfproducts.listOwnProductOrders = new List<OwnProduct>();
                     listOfproducts.listOwnProductOrders.Add(newProduct);
                 }
 
@@ -90,7 +89,6 @@ namespace BackgroundLieferandoApiAsyncRequests
                     // missing information provided by Lieferando API that is not used in for our API:
                     // - (not mandatory) remark
                 };
-
                 listOfOwnOrders.Add(newOrder);
             }
 

@@ -24,6 +24,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
+            
             this.Hide();
             // TODO: pass credentials to lieferando api and text
             // check if successful before going to form request

@@ -31,13 +31,13 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.labelUsername = new System.Windows.Forms.TextBox();
+            this.labelPassword = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.labelApiCode = new System.Windows.Forms.TextBox();
+            this.labelRestaurantId = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -62,19 +62,19 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.btnExit.UseVisualStyleBackColor = true;
             this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
-            // textBox1
+            // labelUsername
             // 
-            this.textBox1.Location = new System.Drawing.Point(182, 145);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(198, 20);
-            this.textBox1.TabIndex = 2;
+            this.labelUsername.Location = new System.Drawing.Point(182, 145);
+            this.labelUsername.Name = "labelUsername";
+            this.labelUsername.Size = new System.Drawing.Size(198, 20);
+            this.labelUsername.TabIndex = 2;
             // 
-            // textBox2
+            // labelPassword
             // 
-            this.textBox2.Location = new System.Drawing.Point(182, 203);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(198, 20);
-            this.textBox2.TabIndex = 3;
+            this.labelPassword.Location = new System.Drawing.Point(182, 203);
+            this.labelPassword.Name = "labelPassword";
+            this.labelPassword.Size = new System.Drawing.Size(198, 20);
+            this.labelPassword.TabIndex = 3;
             // 
             // label1
             // 
@@ -103,19 +103,19 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.label3.TabIndex = 6;
             this.label3.Text = "Restaurant-Id:";
             // 
-            // textBox3
+            // labelApiCode
             // 
-            this.textBox3.Location = new System.Drawing.Point(182, 87);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(198, 20);
-            this.textBox3.TabIndex = 7;
+            this.labelApiCode.Location = new System.Drawing.Point(182, 87);
+            this.labelApiCode.Name = "labelApiCode";
+            this.labelApiCode.Size = new System.Drawing.Size(198, 20);
+            this.labelApiCode.TabIndex = 7;
             // 
-            // textBox4
+            // labelRestaurantId
             // 
-            this.textBox4.Location = new System.Drawing.Point(182, 31);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(198, 20);
-            this.textBox4.TabIndex = 8;
+            this.labelRestaurantId.Location = new System.Drawing.Point(182, 31);
+            this.labelRestaurantId.Name = "labelRestaurantId";
+            this.labelRestaurantId.Size = new System.Drawing.Size(198, 20);
+            this.labelRestaurantId.TabIndex = 8;
             // 
             // label4
             // 
@@ -133,13 +133,13 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(517, 318);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox4);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.labelRestaurantId);
+            this.Controls.Add(this.labelApiCode);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.labelPassword);
+            this.Controls.Add(this.labelUsername);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnLogin);
             this.Name = "FormLieferandoLogin";
@@ -153,13 +153,13 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Button btnExit;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox labelUsername;
+        private System.Windows.Forms.TextBox labelPassword;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.TextBox labelApiCode;
+        private System.Windows.Forms.TextBox labelRestaurantId;
         private System.Windows.Forms.Label label4;
     }
 }

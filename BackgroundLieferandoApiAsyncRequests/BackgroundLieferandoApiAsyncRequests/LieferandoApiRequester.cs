@@ -73,6 +73,10 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         public class OwnProductOrders
         {
+            public OwnProductOrders()
+            {
+                listOwnProductOrders = new List<OwnProduct>();
+            }
             public List<OwnProduct> listOwnProductOrders { get; set; }
         }
 
@@ -103,6 +107,10 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         public class Product
         {
+            public Product()
+            {
+                sideDishes = new List<SideDish>();
+            }
             public double price { get; set; }
             public string name { get; set; }
             public int count { get; set; }
@@ -133,6 +141,11 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         public class Order
         {
+            public Order()
+            {
+                products = new List<Product>();
+                discounts = new List<Discount>();
+            }
             public string orderKey { get; set; }
             public object requestedDeliveryTime { get; set; }
             public string orderType { get; set; }
@@ -156,6 +169,10 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         public class LieferandoOrders
         {
+            public LieferandoOrders()
+            {
+                orders = new List<Order>();
+            }
             public List<Order> orders { get; set; }
         }
 
@@ -164,10 +181,16 @@ namespace BackgroundLieferandoApiAsyncRequests
         //    [JsonProperty("orders")]
         //    public string List<Order> Orders { get; set; }
         //}
+        public static IRestResponse LieferandoApiGetRequest(string apiCode, string username, string password)
+        {
+
+            return null;
+        }
+
 
         public static List<OwnOrders> LieferandoRequest (string username, string password) // later parameter int restaurantId
         {
-            var byteArray = Encoding.ASCII.GetBytes(username + ":" + password); // test-username-123:test-password-123 only for sandbox api
+            var byteArray = Encoding.ASCII.GetBytes(username + ":" + password); // "test-username-123:test-password-123" only for sandbox api
             var clientGet = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567"); // TODO later: Replace with https://posapi.takeaway.com/1.0/orders/<RestaurantId>
             //clientGet.Timeout = -1;
             var requestGetOrd = new RestRequest(Method.GET);
@@ -194,10 +217,5 @@ namespace BackgroundLieferandoApiAsyncRequests
 
             return ownOrders;
         }
-
-        //static void Main(string[] args)
-        //{
-            
-        //}
     }
 }
