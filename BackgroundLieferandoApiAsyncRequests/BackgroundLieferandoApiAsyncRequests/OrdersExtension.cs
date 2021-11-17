@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using static BackgroundLieferandoApiAsyncRequests.LieferandoApiRequester;
-// TODO: import app settings to fill out rest of the missing properties
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
@@ -34,10 +35,10 @@ namespace BackgroundLieferandoApiAsyncRequests
                         printAt = Properties.Settings.Default.PrintAt, // TODO: from config depending on category 
                         tableId = 0, // always 0
                         signatureCount = 0, // always 0
-                        orderId = LieferandoOrderId, //0//int.Parse(order.id),
+                        orderId = LieferandoOrderId,
                         categoryId = Properties.Settings.Default.CategoryId, // TODO: from config depending on category
                         groupId = 1, // always 1
-                        index = productIdx++, // incremental from 1 to n, suffix +1 after each order
+                        index = productIdx++, // suffix +1, incremental from 1 to n, each order
                         isLine = false, // always false
                         editIndex = 0, // always 0
                         productPrice = product.price,
@@ -68,7 +69,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 {
                     action = "automaticOrder", // not provided
                     signature = order.orderKey,
-                    time = "26/10/2021 21:15:40", // TODO: convert time format
+                    time = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString()), // format example "26/10/2021 21:15:40",
                     user = "1",
                     zdata = new Zdata
                     {
@@ -97,6 +98,21 @@ namespace BackgroundLieferandoApiAsyncRequests
 
 
             return listOfOwnOrders;
+        }
+
+        // Function to convert various string representations of dates and times to
+        // DateTime values with format "dd/MM/YYYY HH:mm:ss".
+        private static string ConvertToOwnDateTime(string value)
+        {
+            try
+            {
+                return Convert.ToDateTime(value, CultureInfo.InvariantCulture).ToString();
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("'{0}' is not in the proper format.", value);
+                return value + " is not in the proper format.";
+            }
         }
     }
 }
