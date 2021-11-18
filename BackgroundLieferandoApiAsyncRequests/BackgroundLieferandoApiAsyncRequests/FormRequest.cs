@@ -30,8 +30,16 @@ namespace BackgroundLieferandoApiAsyncRequests
                     e.Cancel = true;
                     return;
                 }
-                // TODO: Forms with Login credentials and start, cancel button and progressBar?
-                var ownOrders = LieferandoApiRequester.LieferandoRequest("test-username-123", "test-password-123"); // credentials for sanboxapi
+                var LieferandoOrders = LieferandoApiRequester.LieferandoRequest(txtBoxUsername.Text, txtBoxPassword.Text, txtBoxApiCode.Text, txtBoxRestaurantId.Text); // credentials for sanboxapi //"test-username-123", "test-password-123"
+                // TODO: better way to catch wrong credentials
+                if(LieferandoOrders == null)
+                {
+                    MessageBox.Show(
+                        "Leider ist ein Fehler aufgetreten! Bitte überprüfen Sie nochmal Ihre Einstellungen und starten den Vorgang erneut."
+                        );
+                    break;
+                }
+                var ownOrders = LieferandoOrders.ToOwnOrder();
                 foreach (var ownOrder in ownOrders)
                 {
                     var newOwnOrder = JsonConvert.SerializeObject(ownOrder, Formatting.Indented);
@@ -45,7 +53,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            progressBarRequest.Value = e.ProgressPercentage;
+            //progressBarRequest.Value = e.ProgressPercentage;
         }
 
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -53,24 +61,29 @@ namespace BackgroundLieferandoApiAsyncRequests
             if(e.Cancelled == true)
             {
                 MessageBox.Show("Cancelled Request");
-                progressBarRequest.Value = 1000;
+                //progressBarRequest.Value = 1000;
             }
             else
             {
                 MessageBox.Show("Completed Request");
             }
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            progressBarRequest.Maximum = 1000;
-            progressBarRequest.Minimum = 0;
-            progressBarRequest.Value = 0;
-            backgroundWorker.RunWorkerAsync();
-        }
+        //private void button1_Click(object sender, EventArgs e)
+        //{
+        //    //progressBarRequest.Maximum = 1000;
+        //    //progressBarRequest.Minimum = 0;
+        //    //progressBarRequest.Value = 0;
+        //    backgroundWorker.RunWorkerAsync();
+        //}
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             backgroundWorker.CancelAsync();
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            backgroundWorker.RunWorkerAsync();
         }
     }
 }

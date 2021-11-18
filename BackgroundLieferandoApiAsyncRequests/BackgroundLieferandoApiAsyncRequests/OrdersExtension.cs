@@ -26,7 +26,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                         status = "INPROGRESS", // what are other status in our API? TODO: status updates to Lieferando API?
                         categoryDesc = product.category,
                         categoryName = product.category,
-                        secondPrintAt = Properties.Settings.Default.secondPrintAt, // TODO: depending on category 
+                        secondPrintAt = Properties.Settings.Default.SecondPrintAt, // TODO: depending on category 
                         productType = "PRODUCT", // always "PRODUCT"
                         productName = product.name,
                         productId = LieferandoProductId,

@@ -26,9 +26,9 @@ namespace BackgroundLieferandoApiAsyncRequests.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("EPSON TM-T82 Receipt")]
-        public string secondPrintAt {
+        public string SecondPrintAt {
             get {
-                return ((string)(this["secondPrintAt"]));
+                return ((string)(this["SecondPrintAt"]));
             }
         }
         
@@ -77,27 +77,60 @@ namespace BackgroundLieferandoApiAsyncRequests.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("tungnm.ptit@gmail.com")]
-        public string CustomerMail {
-            get {
-                return ((string)(this["CustomerMail"]));
-            }
-            set {
-                this["CustomerMail"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ECONOMIC")]
         public string CustomerType {
             get {
                 return ((string)(this["CustomerType"]));
             }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RestaurantId {
+            get {
+                return ((string)(this["RestaurantId"]));
+            }
             set {
-                this["CustomerType"] = value;
+                this["RestaurantId"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ApiCode {
+            get {
+                return ((string)(this["ApiCode"]));
+            }
+            set {
+                this["ApiCode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Username {
+            get {
+                return ((string)(this["Username"]));
+            }
+            set {
+                this["Username"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Password {
+            get {
+                return ((string)(this["Password"]));
+            }
+            set {
+                this["Password"] = value;
             }
         }
     }

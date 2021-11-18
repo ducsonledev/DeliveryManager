@@ -16,7 +16,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormLieferandoLogin());
+            Application.Run(new FormRequest());
         }
     }
 }

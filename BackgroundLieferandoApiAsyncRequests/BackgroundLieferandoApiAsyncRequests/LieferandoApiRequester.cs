@@ -190,16 +190,16 @@ namespace BackgroundLieferandoApiAsyncRequests
         //}
 
 
-        public static List<OwnOrders> LieferandoRequest (string username, string password) // later parameter int restaurantId
+        public static LieferandoOrders LieferandoRequest (string username, string password, string apiCode, string restaurantId) // later parameter int restaurantId
         {
             var byteArray = Encoding.ASCII.GetBytes(username + ":" + password); // "test-username-123:test-password-123" only for sandbox api
-            var clientGet = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567"); // TODO later: Replace with https://posapi.takeaway.com/1.0/orders/<RestaurantId>
+            var clientGet = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/" + restaurantId); // test id 1234567// TODO later: Replace with https://posapi.takeaway.com/1.0/orders/<RestaurantId>
             //clientGet.Timeout = -1;
             var requestGetOrd = new RestRequest(Method.GET);
             requestGetOrd.AddHeader("content-type", "application/json");
-            requestGetOrd.AddHeader("Apikey", "abc123");
+            requestGetOrd.AddHeader("Apikey", apiCode); // "abc123"
             requestGetOrd.AddHeader("Authorization", "Basic " + Convert.ToBase64String(byteArray));
-
+            
             //var clientPost = new RestClient("<server-base-adresse>:13000"); 
             //var clientPost = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567"); // TODO later: Please add server adresse with Port 13000.
             //var requestPostOrd = new RestRequest(Method.POST);
@@ -216,7 +216,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
             
             var newLieferandoOrders = JsonConvert.DeserializeObject<LieferandoOrders>(json); // responseGet.Content // Currently ERROR STATUS CODE 530
-            var ownOrders = newLieferandoOrders.ToOwnOrder();
+            //var ownOrders = newLieferandoOrders.ToOwnOrder();
 
             // sending orders seperately for now
             //foreach (var ownOrder in ownOrders)
@@ -226,7 +226,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             //    Console.WriteLine(responsePost.Content);
             //}
 
-            return ownOrders;
+            return newLieferandoOrders;
         }
     }
 }
