@@ -48,10 +48,8 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             // backgroundWorker
             // 
-            this.backgroundWorker.WorkerReportsProgress = true;
             this.backgroundWorker.WorkerSupportsCancellation = true;
             this.backgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker_DoWork);
-            this.backgroundWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroundWorker_ProgressChanged);
             this.backgroundWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker_RunWorkerCompleted);
             // 
             // panel1
@@ -159,12 +157,12 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             // resultLabel
             // 
-            this.resultLabel.AutoSize = true;
-            this.resultLabel.Location = new System.Drawing.Point(122, 325);
+            this.resultLabel.Location = new System.Drawing.Point(74, 322);
             this.resultLabel.Name = "resultLabel";
-            this.resultLabel.Size = new System.Drawing.Size(193, 13);
+            this.resultLabel.Size = new System.Drawing.Size(284, 13);
             this.resultLabel.TabIndex = 6;
-            this.resultLabel.Text = "Click \"Start\" to begin requesting orders!";
+            this.resultLabel.Text = "Klicke auf \"Start\" um Anfragen an Lieferando zu beginnen!";
+            this.resultLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnCancel
             // 
@@ -193,7 +191,6 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 

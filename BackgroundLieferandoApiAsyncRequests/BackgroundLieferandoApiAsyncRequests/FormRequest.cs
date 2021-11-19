@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
@@ -14,70 +15,67 @@ namespace BackgroundLieferandoApiAsyncRequests
             backgroundWorker.WorkerReportsProgress = true;
             backgroundWorker.WorkerSupportsCancellation = true;
         }
-
+        
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
-
-            TimeSpan interval = new TimeSpan(0, 1, 0); // 1 min
+            //BackgroundWorker worker = sender as BackgroundWorker;
             while (true)
             {
-                if (worker.CancellationPending == true)
+                if (backgroundWorker.CancellationPending == true)
                 {
                     e.Cancel = true;
-                    break;
+                    return;
                 }
                 var LieferandoOrders = LieferandoRequest(txtBoxUsername.Text, txtBoxPassword.Text, txtBoxApiCode.Text, txtBoxRestaurantId.Text); // credentials for sanboxapi //"test-username-123", "test-password-123"
-                if(LieferandoOrders == null)
+                if (LieferandoOrders == null)
                 {
                     MessageBox.Show(
                         "Leider ist ein Fehler aufgetreten! Bitte überprüfen Sie nochmal Ihre Einstellungen und starten Sie den Vorgang erneut."
                         );
                     e.Cancel = true;
-                    break;
+                    return;
                 }
+                
                 PostOwnOrders(LieferandoOrders);
-                Thread.Sleep(interval);
-                // backgroundWorker.ReportProgress(i); //TODO maybe: if we want to show some feedback of the progress working, usually with iterator
+                // TODO: maybe let user decide the time interval of requesting orders
+                Thread.Sleep(Properties.Settings.Default.OrdersInterval);
             }
-        }
-
-        private void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            //progressBarRequest.Value = e.ProgressPercentage;
         }
 
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            //if(e.Cancelled == true)
-            //{
-            //    MessageBox.Show("Cancelled Request");
-            //    //progressBarRequest.Value = 1000;
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Completed Request");
-            //}
+            // First, handle the case where an exception was thrown.
+            if (e.Error != null)
+            {
+                //MessageBox.Show(e.Error.Message);
+                resultLabel.Text = "Error: " + e.Error.Message;
+            }
             if (e.Cancelled == true)
             {
-                resultLabel.Text = "Canceled!";
-            }
-            else if (e.Error != null)
-            {
-                resultLabel.Text = "Error: " + e.Error.Message;
+                resultLabel.Text = "Requests canceled!";
+                resultLabel.ForeColor = Color.Red;
             }
             else
             {
-                resultLabel.Text = "Running!";
+                resultLabel.Text = "Requests completed!";
             }
+
+            resultLabel.TextAlign = ContentAlignment.MiddleCenter;
+
+            // Enable the Start button.
+            btnStart.Enabled = true;
+
+            // Disable the Cancel button.
+            btnCancel.Enabled = false;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            //progressBarRequest.Maximum = 1000;
-            //progressBarRequest.Minimum = 0;
-            //progressBarRequest.Value = 0;
             backgroundWorker.RunWorkerAsync();
+            resultLabel.Text = "Requesting orders from Lieferando!";
+            resultLabel.ForeColor = Color.Green;
+            btnCancel.Enabled = true;
+            MessageBox.Show("Start Clicked!"); // for testing
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -86,6 +84,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             {
                 // Cancel the asynchronous operation.
                 backgroundWorker.CancelAsync();
+                MessageBox.Show("Canceled Clicked! Please wait " + Properties.Settings.Default.OrdersInterval + " until new check for pending status starts."); // message for testing
             }
         }
     }

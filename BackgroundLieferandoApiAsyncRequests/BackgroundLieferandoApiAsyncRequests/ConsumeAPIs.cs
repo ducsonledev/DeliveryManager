@@ -202,7 +202,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             // Sorry for hardcoded path, it's just for testing purposes for now, since https://sandbox-pull-posapi.takeaway.com as of now is currently not available.
             // I contacted Lieferando-Support regarding that problem, I hope, they resolve that soon.
             // Get Request are Status Code 530 right now which does not give orders.
-            using (StreamReader r = new StreamReader("C:/Users/Son/Desktop/Arbeitsplatz/AIM/aimIT/BackgroundLieferandoApiAsyncRequests/BackgroundLieferandoApiAsyncRequests/LieferandoSandboxOrders.json"))
+            using (StreamReader r = new StreamReader("../../LieferandoSandboxOrders.json")) // in DUBUG MODE ../../ because we end up in bin/Debug/ 
             {
                 json = r.ReadToEnd();
             }
