@@ -3,11 +3,12 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
-    public class LieferandoApiRequester
+    public class ConsumeAPIs
     {
         //public class Order
         //{
@@ -183,12 +184,6 @@ namespace BackgroundLieferandoApiAsyncRequests
         //    public string List<Order> Orders { get; set; }
         //}
 
-        //public static IRestResponse LieferandoApiGetRequest(string apiCode, string username, string password)
-        //{
-
-        //    return null;
-        //}
-
 
         public static LieferandoOrders LieferandoRequest (string username, string password, string apiCode, string restaurantId) // later parameter int restaurantId
         {
@@ -199,12 +194,9 @@ namespace BackgroundLieferandoApiAsyncRequests
             requestGetOrd.AddHeader("content-type", "application/json");
             requestGetOrd.AddHeader("Apikey", apiCode); // "abc123"
             requestGetOrd.AddHeader("Authorization", "Basic " + Convert.ToBase64String(byteArray));
-            
-            //var clientPost = new RestClient("<server-base-adresse>:13000"); 
-            //var clientPost = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567"); // TODO later: Please add server adresse with Port 13000.
-            //var requestPostOrd = new RestRequest(Method.POST);
 
-            //IRestResponse responseGet = clientGet.Execute(requestGetOrd); // Currently ERROR STATUS CODE 530
+            //IRestResponse responseGet = clientGet.Execute(requestGetOrd); // Currently ERROR STATUS CODE 530 // uncomment for re-testing
+            //if (responseGet.StatusCode != HttpStatusCode.OK) return null; // TODO case: change if response content can be null not empty {}
             
             string json;
             // Sorry for hardcoded path, it's just for testing purposes for now, since https://sandbox-pull-posapi.takeaway.com as of now is currently not available.
@@ -215,18 +207,28 @@ namespace BackgroundLieferandoApiAsyncRequests
                 json = r.ReadToEnd();
             }
             
-            var newLieferandoOrders = JsonConvert.DeserializeObject<LieferandoOrders>(json); // responseGet.Content // Currently ERROR STATUS CODE 530
-            //var ownOrders = newLieferandoOrders.ToOwnOrder();
-
-            // sending orders seperately for now
-            //foreach (var ownOrder in ownOrders)
-            //{
-            //    var newOwnOrder = JsonConvert.SerializeObject(ownOrder, Formatting.Indented);
-            //    IRestResponse responsePost = clientPost.Execute(requestPostOrd.AddJsonBody(newOwnOrder));
-            //    Console.WriteLine(responsePost.Content);
-            //}
+            var newLieferandoOrders = JsonConvert.DeserializeObject<LieferandoOrders>(json); // json // responseGet.Content // Currently ERROR STATUS CODE 530
+                  
 
             return newLieferandoOrders;
+        }
+
+        // Post OwnOrders to our server api
+        public static IRestResponse PostOwnOrders(LieferandoOrders LieferandoOrders)
+        {
+            //var clientPost = new RestClient("<server-base-adresse>:13000"); 
+            var clientPost = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567"); // temp test adress // TODO later: Please add server adresse with Port 13000.
+            var requestPostOrd = new RestRequest(Method.POST);
+            IRestResponse responsePost = null;
+
+            // sending orders seperately for now
+            var ownOrders = LieferandoOrders.ToOwnOrder();
+            foreach (var ownOrder in ownOrders)
+            {
+                var newOwnOrder = JsonConvert.SerializeObject(ownOrder, Formatting.Indented);
+                responsePost = clientPost.Execute(requestPostOrd.AddJsonBody(newOwnOrder));
+            }
+            return responsePost;
         }
     }
 }

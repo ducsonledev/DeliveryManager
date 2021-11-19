@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using static BackgroundLieferandoApiAsyncRequests.LieferandoApiRequester;
+using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
@@ -23,10 +23,13 @@ namespace BackgroundLieferandoApiAsyncRequests
                     int.TryParse(order.id, out int LieferandoOrderId);
                     var newProduct = new OwnProduct
                     {
-                        status = "INPROGRESS", // what are other status in our API? TODO: status updates to Lieferando API?
+                        status = "INPROGRESS", // what are other status in our API? TODO: status updates to Lieferando API
+                                               // to send it to Lieferando its status are either
+                                               // printed, kitchen, in_delivery, confirmed_change_delivery_time, delivered or error
+                                               // see documentation (page 8): https://tcapp.takeaway.com/manuals/external_order_api_manual.pdf
                         categoryDesc = product.category,
                         categoryName = product.category,
-                        secondPrintAt = Properties.Settings.Default.SecondPrintAt, // TODO: depending on category 
+                        secondPrintAt = Properties.Settings.Default.SecondPrintAt, // TODO: depending on category (example?)
                         productType = "PRODUCT", // always "PRODUCT"
                         productName = product.name,
                         productId = LieferandoProductId,
@@ -81,17 +84,18 @@ namespace BackgroundLieferandoApiAsyncRequests
                             customerCode = order.customer.postalCode,
                             customerCity = order.customer.city,
                             customerAddress = order.customer.street,
-                            customerMail = "tungnm.ptit@gmail.com", // not provided
+                            customerMail = "tungnm.ptit@gmail.com", // not provided by Lieferando API, where should I get it from the customer?
                             customerType = "ECONOMIC", // not provided
                             id = 1
                             // missing information provided by Lieferando API that is not used in our API:
-                            // - (not mandatory) extraAddressInfo
+                            // - (not mandatory) extraAddressInfo f.e. floor 2 or sometimes it's another Building Complex on the same adress
                         },
                         listProductOrders = listOfproducts,
-                        waiter = "1" // not provided
+                        waiter = "1" // not provided, probably always some kind of arbitrary number like 0?
                     },
-                    // missing information provided by Lieferando API that is not used in for our API:
-                    // - (not mandatory) remark
+                    // missing information provided by Lieferando API that is not used in our API:
+                    // - (not mandatory) remark f.e. "Nicht klingeln bitte"
+                    // (Spätschicht Lieferung Baby schlafen, Bote meldet sich telefonisch bei Ankunft)
                 };
                 listOfOwnOrders.Add(newOrder);
             }

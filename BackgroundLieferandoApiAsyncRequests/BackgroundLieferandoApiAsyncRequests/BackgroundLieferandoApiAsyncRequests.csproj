@@ -75,7 +75,7 @@
     <Compile Include="FormRequest.Designer.cs">
       <DependentUpon>FormRequest.cs</DependentUpon>
     </Compile>
-    <Compile Include="LieferandoApiRequester.cs" />
+    <Compile Include="ConsumeAPIs.cs" />
     <Compile Include="OrdersExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
