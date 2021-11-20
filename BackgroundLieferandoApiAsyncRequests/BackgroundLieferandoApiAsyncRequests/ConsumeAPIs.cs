@@ -184,14 +184,14 @@ namespace BackgroundLieferandoApiAsyncRequests
         //}
 
 
-        public static LieferandoOrders LieferandoRequest (string username, string password, string apiCode, string restaurantId) // later parameter int restaurantId
+        public static LieferandoOrders LieferandoRequest (string restaurantId, string apikey, string username, string password) // later parameter int restaurantId
         {
             var byteArray = Encoding.ASCII.GetBytes(username + ":" + password); // "test-username-123:test-password-123" only for sandbox api
             var clientGet = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/" + restaurantId); // test id 1234567// TODO later: Replace with https://posapi.takeaway.com/1.0/orders/<RestaurantId>
             //clientGet.Timeout = -1;
             var requestGetOrd = new RestRequest(Method.GET);
             requestGetOrd.AddHeader("content-type", "application/json");
-            requestGetOrd.AddHeader("Apikey", apiCode); // "abc123"
+            requestGetOrd.AddHeader("Apikey", apikey); // "abc123"
             requestGetOrd.AddHeader("Authorization", "Basic " + Convert.ToBase64String(byteArray));
 
             //IRestResponse responseGet = clientGet.Execute(requestGetOrd); // Currently ERROR STATUS CODE 530 // uncomment for re-testing

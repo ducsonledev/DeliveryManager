@@ -86,63 +86,48 @@ namespace BackgroundLieferandoApiAsyncRequests.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1234567")]
         public string RestaurantId {
             get {
                 return ((string)(this["RestaurantId"]));
             }
-            set {
-                this["RestaurantId"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ApiCode {
+        [global::System.Configuration.DefaultSettingValueAttribute("abc123")]
+        public string ApiKey {
             get {
-                return ((string)(this["ApiCode"]));
-            }
-            set {
-                this["ApiCode"] = value;
+                return ((string)(this["ApiKey"]));
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("test-username-123")]
         public string Username {
             get {
                 return ((string)(this["Username"]));
             }
-            set {
-                this["Username"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("test-password-123")]
         public string Password {
             get {
                 return ((string)(this["Password"]));
             }
-            set {
-                this["Password"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:00:10")]
         public global::System.TimeSpan OrdersInterval {
             get {
                 return ((global::System.TimeSpan)(this["OrdersInterval"]));
-            }
-            set {
-                this["OrdersInterval"] = value;
             }
         }
     }

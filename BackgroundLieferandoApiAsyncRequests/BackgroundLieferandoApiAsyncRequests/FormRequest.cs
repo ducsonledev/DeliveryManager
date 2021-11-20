@@ -26,7 +26,12 @@ namespace BackgroundLieferandoApiAsyncRequests
                     e.Cancel = true;
                     return;
                 }
-                var LieferandoOrders = LieferandoRequest(txtBoxUsername.Text, txtBoxPassword.Text, txtBoxApiCode.Text, txtBoxRestaurantId.Text); // credentials for sanboxapi //"test-username-123", "test-password-123"
+                var LieferandoOrders = LieferandoRequest(
+                    Properties.Settings.Default.RestaurantId,
+                    Properties.Settings.Default.ApiKey, 
+                    Properties.Settings.Default.Username, 
+                    Properties.Settings.Default.Password
+                    ); // for testing credentials for sanboxapi
                 if (LieferandoOrders == null)
                 {
                     MessageBox.Show(
@@ -37,7 +42,6 @@ namespace BackgroundLieferandoApiAsyncRequests
                 }
                 
                 PostOwnOrders(LieferandoOrders);
-                // TODO: maybe let user decide the time interval of requesting orders
                 Thread.Sleep(Properties.Settings.Default.OrdersInterval);
             }
         }
@@ -86,6 +90,12 @@ namespace BackgroundLieferandoApiAsyncRequests
                 backgroundWorker.CancelAsync();
                 MessageBox.Show("Canceled Clicked! Please wait " + Properties.Settings.Default.OrdersInterval + " until new check for pending status starts."); // message for testing
             }
+        }
+
+        private void FormRequest_Load(object sender, EventArgs e)
+        {
+            backgroundWorker.RunWorkerAsync();
+            resultLabel.Text = "Requesting orders from Lieferando!";
         }
     }
 }
