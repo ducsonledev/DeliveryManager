@@ -2,6 +2,7 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 
@@ -174,6 +175,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             {
                 orders = new List<Order>();
             }
+            [JsonProperty("orders")]
             public List<Order> orders { get; set; }
         }
 
@@ -207,8 +209,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
             
             var newLieferandoOrders = JsonConvert.DeserializeObject<LieferandoOrders>(json); // json // responseGet.Content // Currently ERROR STATUS CODE 530
-                  
-
+            
             return newLieferandoOrders;
         }
 
@@ -229,5 +230,6 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
             return responsePost;
         }
+
     }
 }

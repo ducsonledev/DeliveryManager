@@ -29,14 +29,14 @@ namespace BackgroundLieferandoApiAsyncRequests
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.btnStart = new System.Windows.Forms.Button();
             this.resultLabel = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dataGridViewFormRequest = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonDetails = new System.Windows.Forms.Button();
             this.panelLieferzeitSenden = new System.Windows.Forms.Panel();
@@ -52,18 +52,8 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonZubereitungStart = new System.Windows.Forms.Button();
             this.buttonLieferungStart = new System.Windows.Forms.Button();
             this.buttonLieferungAbschließen = new System.Windows.Forms.Button();
-            this.Start = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ende = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DatagridViewRequestName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Straße = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Ort = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Telefon = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Summe = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Kasse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Datum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFormRequest)).BeginInit();
             this.panelLieferzeitSenden.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -126,38 +116,32 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.panel1.Size = new System.Drawing.Size(383, 107);
             this.panel1.TabIndex = 10;
             // 
-            // dataGridView1
+            // dataGridViewFormRequest
             // 
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridView1.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
-            this.dataGridView1.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Start,
-            this.Ende,
-            this.DatagridViewRequestName,
-            this.Straße,
-            this.Ort,
-            this.Telefon,
-            this.Summe,
-            this.Status,
-            this.Kasse,
-            this.Datum});
-            this.dataGridView1.GridColor = System.Drawing.Color.Black;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 112);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.dataGridView1.Size = new System.Drawing.Size(848, 171);
-            this.dataGridView1.TabIndex = 11;
+            this.dataGridViewFormRequest.AllowUserToAddRows = false;
+            this.dataGridViewFormRequest.AllowUserToDeleteRows = false;
+            this.dataGridViewFormRequest.AllowUserToResizeColumns = false;
+            this.dataGridViewFormRequest.AllowUserToResizeRows = false;
+            this.dataGridViewFormRequest.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewFormRequest.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.dataGridViewFormRequest.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataGridViewFormRequest.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.dataGridViewFormRequest.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dataGridViewFormRequest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewFormRequest.GridColor = System.Drawing.Color.Black;
+            this.dataGridViewFormRequest.Location = new System.Drawing.Point(0, 112);
+            this.dataGridViewFormRequest.Name = "dataGridViewFormRequest";
+            this.dataGridViewFormRequest.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridViewFormRequest.Size = new System.Drawing.Size(848, 171);
+            this.dataGridViewFormRequest.TabIndex = 11;
             // 
             // label2
             // 
@@ -177,6 +161,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonDetails.TabIndex = 13;
             this.buttonDetails.Text = "Details anzeigen";
             this.buttonDetails.UseVisualStyleBackColor = true;
+            this.buttonDetails.Click += new System.EventHandler(this.buttonDetails_Click);
             // 
             // panelLieferzeitSenden
             // 
@@ -306,91 +291,27 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonLieferungStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonLieferungStart.Location = new System.Drawing.Point(575, 17);
             this.buttonLieferungStart.Name = "buttonLieferungStart";
-            this.buttonLieferungStart.Size = new System.Drawing.Size(120, 68);
+            this.buttonLieferungStart.Size = new System.Drawing.Size(128, 68);
             this.buttonLieferungStart.TabIndex = 27;
             this.buttonLieferungStart.Text = "Lieferung starten";
             this.buttonLieferungStart.UseVisualStyleBackColor = false;
             // 
             // buttonLieferungAbschließen
             // 
-            this.buttonLieferungAbschließen.Location = new System.Drawing.Point(701, 17);
+            this.buttonLieferungAbschließen.Location = new System.Drawing.Point(709, 17);
             this.buttonLieferungAbschließen.Name = "buttonLieferungAbschließen";
-            this.buttonLieferungAbschließen.Size = new System.Drawing.Size(135, 68);
+            this.buttonLieferungAbschließen.Size = new System.Drawing.Size(128, 68);
             this.buttonLieferungAbschließen.TabIndex = 28;
             this.buttonLieferungAbschließen.Text = "Lieferung abschließen";
             this.buttonLieferungAbschließen.UseVisualStyleBackColor = true;
-            // 
-            // Start
-            // 
-            this.Start.HeaderText = "Start";
-            this.Start.Name = "Start";
-            this.Start.ReadOnly = true;
-            this.Start.Width = 60;
-            // 
-            // Ende
-            // 
-            this.Ende.HeaderText = "Ende";
-            this.Ende.Name = "Ende";
-            this.Ende.ReadOnly = true;
-            this.Ende.Width = 60;
-            // 
-            // DatagridViewRequestName
-            // 
-            this.DatagridViewRequestName.HeaderText = "Name";
-            this.DatagridViewRequestName.Name = "DatagridViewRequestName";
-            this.DatagridViewRequestName.ReadOnly = true;
-            // 
-            // Straße
-            // 
-            this.Straße.HeaderText = "Straße";
-            this.Straße.Name = "Straße";
-            this.Straße.ReadOnly = true;
-            // 
-            // Ort
-            // 
-            this.Ort.HeaderText = "Ort";
-            this.Ort.Name = "Ort";
-            this.Ort.ReadOnly = true;
-            // 
-            // Telefon
-            // 
-            this.Telefon.HeaderText = "Telefon";
-            this.Telefon.Name = "Telefon";
-            this.Telefon.ReadOnly = true;
-            // 
-            // Summe
-            // 
-            this.Summe.HeaderText = "Summe";
-            this.Summe.Name = "Summe";
-            this.Summe.ReadOnly = true;
-            this.Summe.Width = 65;
-            // 
-            // Status
-            // 
-            this.Status.HeaderText = "Status";
-            this.Status.Name = "Status";
-            this.Status.ReadOnly = true;
-            this.Status.Width = 60;
-            // 
-            // Kasse
-            // 
-            this.Kasse.HeaderText = "Kasse";
-            this.Kasse.Name = "Kasse";
-            this.Kasse.ReadOnly = true;
-            this.Kasse.Width = 60;
-            // 
-            // Datum
-            // 
-            this.Datum.HeaderText = "Datum";
-            this.Datum.Name = "Datum";
-            this.Datum.ReadOnly = true;
+            this.buttonLieferungAbschließen.Click += new System.EventHandler(this.buttonLieferungAbschließen_Click);
             // 
             // FormRequest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ClientSize = new System.Drawing.Size(848, 470);
+            this.ClientSize = new System.Drawing.Size(848, 432);
             this.Controls.Add(this.buttonLieferungAbschließen);
             this.Controls.Add(this.buttonLieferungStart);
             this.Controls.Add(this.buttonZubereitungStart);
@@ -401,15 +322,16 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.Controls.Add(this.panelLieferzeitSenden);
             this.Controls.Add(this.buttonDetails);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dataGridViewFormRequest);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FormRequest";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FormRequest";
             this.Load += new System.EventHandler(this.FormRequest_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFormRequest)).EndInit();
             this.panelLieferzeitSenden.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -423,7 +345,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dataGridViewFormRequest;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonDetails;
         private System.Windows.Forms.Panel panelLieferzeitSenden;
@@ -439,16 +361,6 @@ namespace BackgroundLieferandoApiAsyncRequests
         private System.Windows.Forms.Button buttonZubereitungStart;
         private System.Windows.Forms.Button buttonLieferungStart;
         private System.Windows.Forms.Button buttonLieferungAbschließen;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Start;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Ende;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DatagridViewRequestName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Straße;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Ort;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Telefon;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Summe;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Kasse;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Datum;
     }
 }
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Globalization;
 using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
 
@@ -106,7 +108,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         // Function to convert various string representations of dates and times to
         // DateTime values with format "dd/MM/YYYY HH:mm:ss".
-        private static string ConvertToOwnDateTime(string value)
+        public static string ConvertToOwnDateTime(string value)
         {
             try
             {
@@ -117,6 +119,31 @@ namespace BackgroundLieferandoApiAsyncRequests
                 Console.WriteLine("'{0}' is not in the proper format.", value);
                 return value + " is not in the proper format.";
             }
+        }
+
+        // Converting IList<Orders> of orders from Lieferando into a DataTable.
+        // https://stackoverflow.com/questions/11981282/convert-json-to-datatable
+        public static DataTable ToDataTable<Orders>(this IList<Orders> data)
+        {
+            // TODO: check if id not already in data
+            PropertyDescriptorCollection props =
+            TypeDescriptor.GetProperties(typeof(Orders));
+            DataTable table = new DataTable();
+            for (int i = 0; i < props.Count; i++)
+            {
+                PropertyDescriptor prop = props[i];
+                table.Columns.Add(prop.Name, prop.PropertyType);
+            }
+            object[] values = new object[props.Count];
+            foreach (Orders item in data)
+            {
+                for (int i = 0; i < values.Length; i++)
+                {
+                    values[i] = props[i].GetValue(item);
+                }
+                table.Rows.Add(values);
+            }
+            return table;
         }
     }
 }
