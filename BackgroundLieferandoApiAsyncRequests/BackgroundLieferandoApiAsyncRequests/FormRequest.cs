@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -47,7 +48,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                     return;
                 }
 
-                PopulateDataGridView(LieferandoOrders);
+                PopulateDataGridViewOrders(LieferandoOrders);
                 // TODO: post only if new
                 PostOwnOrders(LieferandoOrders);
                 Thread.Sleep(Properties.Settings.Default.OrdersInterval);
@@ -110,71 +111,91 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void button15min_Click(object sender, EventArgs e)
         {
-            UpdateRowStatusColor();
+            UpdateStatus();
         }
 
         private void button20min_Click(object sender, EventArgs e)
         {
-            UpdateRowStatusColor();
+            UpdateStatus();
         }
 
         private void button30min_Click(object sender, EventArgs e)
         {
-            UpdateRowStatusColor();
+            UpdateStatus();
         }
 
         private void button45min_Click(object sender, EventArgs e)
         {
-            UpdateRowStatusColor();
+            UpdateStatus();
         }
 
         private void button60min_Click(object sender, EventArgs e)
         {
-            UpdateRowStatusColor();
+            UpdateStatus();
         }
 
         private void buttonZubereitungStart_Click(object sender, EventArgs e)
         {
-            UpdateRowStatusColor();
+            UpdateStatus();
         }
 
         private void buttonLieferungStart_Click(object sender, EventArgs e)
         {
-            UpdateRowStatusColor();
+            UpdateStatus();
         }
         private void buttonLieferungAbschließen_Click(object sender, EventArgs e)
         {
-            UpdateRowStatusColor();
+            UpdateStatus();
         }
 
         private void buttonDetails_Click(object sender, EventArgs e)
         {
-            var formDetails = new FormDetails(this);
+            var formDetails = new FormDetails(GlobalDataTable, DataGridViewFormRequest.CurrentCell.RowIndex);
             formDetails.ShowDialog();
         }
 
         private void InitializeGlobalDataTable()
         {
             // creating DataTable for our DataGridView
-            GlobalDataTable = new DataTable("TodaysOrders" + DateTime.Now);
+            GlobalDataTable = new DataTable("TodaysOrders" + DateTime.Now.Date);
+            // identify orders
             GlobalDataTable.Columns.Add("Id", typeof(string));
+            // DataGridView headers
             GlobalDataTable.Columns.Add("Start", typeof(string));
             GlobalDataTable.Columns.Add("Ende", typeof(string));
             GlobalDataTable.Columns.Add("Name", typeof(string));
             GlobalDataTable.Columns.Add("Straße", typeof(string));
             GlobalDataTable.Columns.Add("Ort", typeof(string));
             GlobalDataTable.Columns.Add("Telefon", typeof(string));
-            GlobalDataTable.Columns.Add("Summe", typeof(double));
+            GlobalDataTable.Columns.Add("Summe", typeof(string));
             GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO: Documentation Status 0,1,2,3, ...
             GlobalDataTable.Columns.Add("Kasse", typeof(string));
             GlobalDataTable.Columns.Add("Datum", typeof(string));
-            // hide columns for clearer UI
-            GlobalDataTable.Columns[0].ColumnMapping = MappingType.Hidden;
+            // hidden information for FormDetails
+            GlobalDataTable.Columns.Add("PLZ", typeof(string));
+            GlobalDataTable.Columns.Add("Zusatz", typeof(string));
+            GlobalDataTable.Columns.Add("Lieferung", typeof(string));
+            GlobalDataTable.Columns.Add("Lieferkosten", typeof(string));
+            GlobalDataTable.Columns.Add("Rabatt", typeof(string));
+            GlobalDataTable.Columns.Add("Info", typeof(string));
+            GlobalDataTable.Columns.Add("Bezahlt", typeof(string));
+            GlobalDataTable.Columns.Add("Produkte", typeof(List<Product>));
+            GlobalDataTable.Columns.Add("Rabattgutscheine", typeof(List<Discount>));
 
-            // TODO: more information for FormDetails
+            // hide columns for clearer UI, only show necessary headers to the user
+            GlobalDataTable.Columns[0].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[11].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[12].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[13].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[14].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[15].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[16].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[17].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[18].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[19].ColumnMapping = MappingType.Hidden;
         }
 
-        private bool PopulateDataGridView(LieferandoOrders lieferandoOrders)
+        private bool PopulateDataGridViewOrders(LieferandoOrders lieferandoOrders)
         {
             bool populated = false;
             foreach (var order in lieferandoOrders.orders)
@@ -190,20 +211,30 @@ namespace BackgroundLieferandoApiAsyncRequests
                 // "01600102",
                 // 4.00, 1, 1, "21/12/21");
                 var datetime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString());
+                // TODO maybe: use datetime.Date datetime.Time instead of splitting (but need to handle errors empty/wrong datetime)
                 var split_datetime = datetime.Split(' ');
                 GlobalDataTable.Rows.Add(
                     order.id,
-                    split_datetime[1],
-                    "13:02",
+                    split_datetime[1], // TODO fix: orderDate as start time!
+                    "13:02", // TODO fix: requested delivery time as end time!// TODO: adding delivery time to start time // TODO: automatic delivery time
                     order.customer.name,
-                    order.customer.street,
+                    order.customer.street + " " + order.customer.streetNumber,
                     order.customer.city,
                     order.customer.phoneNumber,
-                    order.totalPrice,
+                    order.totalPrice.ToString("0.00"),
                     0,
                     Properties.Settings.Default.Kasse,
-                    split_datetime[0]
-                    );
+                    split_datetime[0],
+                    order.customer.postalCode,
+                    order.customer.extraAddressInfo,
+                    (order.orderType == "delivery") ? "ja" : "nein",
+                    order.deliveryCosts.ToString("0.00"),
+                    order.totalDiscount.ToString("0.00"),
+                    order.remark,
+                    order.isPaid ? "ja" : "nein",
+                    order.products,
+                    order.discounts
+                );
                 // code reached 
                 // TODO: but not filtering specific orders that should be posted to our server
                 populated = true;
@@ -229,16 +260,27 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
         }
 
+        //
+        // TODO: UpdateStatus in general -> post status update and update row color call
+        // use with currently selected row
+        //
+        private bool UpdateStatus()
+        {
+            // call PostUpdateStatus from ConsumeAPIs.cs
+            UpdateStatusColors();
+            return true;
+        }
+
         // Highlights the rows in specific color according to the changes in status send to Lieferando.
         // Documentation: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datagridview.selectionchanged?redirectedfrom=MSDN&view=windowsdesktop-6.0
-        private void UpdateRowStatusColor()
+        private void UpdateStatusColors()
         {
             int status;
             // Iterate through the rows.
             for (int i = 0; i < DataGridViewFormRequest.Rows.Count; i++)
             {
                 status = int.Parse(DataGridViewFormRequest.Rows[i].Cells["Status"].Value.ToString());
-
+                // TODO: switch(better code design)?
                 // Status 0: The order was printed by a restaurant. (printed)
                 if (status == 0)
                 {

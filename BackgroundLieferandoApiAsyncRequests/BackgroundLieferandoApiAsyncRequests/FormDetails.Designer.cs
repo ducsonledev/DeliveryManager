@@ -31,7 +31,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.dataGridViewFormDetails = new System.Windows.Forms.DataGridView();
+            this.DataGridViewFormDetails = new System.Windows.Forms.DataGridView();
             this.ArtikelNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Bezeichnung = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Menge = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -60,37 +60,37 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.textBoxBezahlt = new System.Windows.Forms.TextBox();
             this.labelBezahlt = new System.Windows.Forms.Label();
             this.buttonZurück = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFormDetails)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridViewFormDetails)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridViewFormDetails
+            // DataGridViewFormDetails
             // 
-            this.dataGridViewFormDetails.AllowUserToAddRows = false;
-            this.dataGridViewFormDetails.AllowUserToDeleteRows = false;
-            this.dataGridViewFormDetails.AllowUserToResizeColumns = false;
-            this.dataGridViewFormDetails.AllowUserToResizeRows = false;
-            this.dataGridViewFormDetails.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewFormDetails.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            this.dataGridViewFormDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridViewFormDetails.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
-            this.dataGridViewFormDetails.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dataGridViewFormDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFormDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.DataGridViewFormDetails.AllowUserToAddRows = false;
+            this.DataGridViewFormDetails.AllowUserToDeleteRows = false;
+            this.DataGridViewFormDetails.AllowUserToResizeColumns = false;
+            this.DataGridViewFormDetails.AllowUserToResizeRows = false;
+            this.DataGridViewFormDetails.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGridViewFormDetails.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.DataGridViewFormDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.DataGridViewFormDetails.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.DataGridViewFormDetails.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.DataGridViewFormDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridViewFormDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ArtikelNr,
             this.Bezeichnung,
             this.Menge,
             this.Preis,
             this.Zusatz});
-            this.dataGridViewFormDetails.GridColor = System.Drawing.Color.Black;
-            this.dataGridViewFormDetails.Location = new System.Drawing.Point(-43, 88);
-            this.dataGridViewFormDetails.Name = "dataGridViewFormDetails";
-            this.dataGridViewFormDetails.ReadOnly = true;
-            this.dataGridViewFormDetails.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.dataGridViewFormDetails.RowsDefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewFormDetails.ShowEditingIcon = false;
-            this.dataGridViewFormDetails.Size = new System.Drawing.Size(777, 185);
-            this.dataGridViewFormDetails.TabIndex = 0;
+            this.DataGridViewFormDetails.GridColor = System.Drawing.Color.Black;
+            this.DataGridViewFormDetails.Location = new System.Drawing.Point(-43, 88);
+            this.DataGridViewFormDetails.Name = "DataGridViewFormDetails";
+            this.DataGridViewFormDetails.ReadOnly = true;
+            this.DataGridViewFormDetails.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            this.DataGridViewFormDetails.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.DataGridViewFormDetails.ShowEditingIcon = false;
+            this.DataGridViewFormDetails.Size = new System.Drawing.Size(777, 214);
+            this.DataGridViewFormDetails.TabIndex = 0;
             // 
             // ArtikelNr
             // 
@@ -333,7 +333,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ClientSize = new System.Drawing.Size(734, 274);
+            this.ClientSize = new System.Drawing.Size(734, 301);
             this.Controls.Add(this.buttonZurück);
             this.Controls.Add(this.textBoxBezahlt);
             this.Controls.Add(this.labelBezahlt);
@@ -357,11 +357,11 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.Controls.Add(this.labelStraße);
             this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.labelName);
-            this.Controls.Add(this.dataGridViewFormDetails);
+            this.Controls.Add(this.DataGridViewFormDetails);
             this.Name = "FormDetails";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FormDetails";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFormDetails)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridViewFormDetails)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -369,7 +369,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridViewFormDetails;
+        private System.Windows.Forms.DataGridView DataGridViewFormDetails;
         private System.Windows.Forms.Label labelName;
         private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.TextBox textBoxStraße;

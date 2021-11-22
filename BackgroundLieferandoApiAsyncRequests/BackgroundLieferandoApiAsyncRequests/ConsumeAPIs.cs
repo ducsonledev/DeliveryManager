@@ -149,7 +149,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 discounts = new List<Discount>();
             }
             public string orderKey { get; set; }
-            public object requestedDeliveryTime { get; set; }
+            public object requestedDeliveryTime { get; set; } // TODO maybe: instead of object, use DateTime as datatype
             public string orderType { get; set; }
             public double totalPrice { get; set; }
             public string remark { get; set; }
@@ -231,5 +231,17 @@ namespace BackgroundLieferandoApiAsyncRequests
             return responsePost;
         }
 
-    }
+        // TODO: send status update to https://posapi.takeaway.com/1.0/status with correct json format
+        // f.e.
+        // {
+        //      "id": "cae66b7e-791b-11e7-b4d8-3464a91febf3",
+        //      "key": "D41D8CD98F00B204E9800998ECF8427E",
+        //      "status": "confirmed_change_delivery_time",
+        //      "changedDeliveryTime": "2020-02-04T19:45:00+02:00"
+        // }
+        public static bool PostStatusUpdate()
+            {
+                return true;
+            }
+        }
 }
