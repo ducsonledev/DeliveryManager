@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Globalization;
 using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
 
 namespace BackgroundLieferandoApiAsyncRequests
@@ -74,7 +72,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 {
                     action = "automaticOrder", // not provided
                     signature = order.orderKey,
-                    time = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString()), // format example "26/10/2021 21:15:40",
+                    time = order.orderDate.ToString("dd/MM/yyyy HH:mm:ss"), // format example "26/10/2021 21:15:40",
                     user = "1",
                     zdata = new Zdata
                     {
@@ -104,21 +102,6 @@ namespace BackgroundLieferandoApiAsyncRequests
 
 
             return listOfOwnOrders;
-        }
-
-        // Function to convert various string representations of dates and times to
-        // DateTime values with format "dd/MM/YYYY HH:mm:ss".
-        public static string ConvertToOwnDateTime(string value)
-        {
-            try
-            {
-                return Convert.ToDateTime(value, CultureInfo.InvariantCulture).ToString();
-            }
-            catch (FormatException)
-            {
-                Console.WriteLine("'{0}' is not in the proper format.", value);
-                return value + " is not in the proper format.";
-            }
         }
 
         // Converting IList<Orders> of orders from Lieferando into a DataTable.

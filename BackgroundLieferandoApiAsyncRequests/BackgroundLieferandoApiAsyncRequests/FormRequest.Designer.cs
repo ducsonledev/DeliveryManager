@@ -37,7 +37,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.DataGridViewFormRequest = new System.Windows.Forms.DataGridView();
-            this.label2 = new System.Windows.Forms.Label();
+            this.labelTimeNow = new System.Windows.Forms.Label();
             this.buttonDetails = new System.Windows.Forms.Button();
             this.panelLieferzeitSenden = new System.Windows.Forms.Panel();
             this.button15min = new System.Windows.Forms.Button();
@@ -130,11 +130,12 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.DataGridViewFormRequest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridViewFormRequest.GridColor = System.Drawing.Color.Black;
             this.DataGridViewFormRequest.Location = new System.Drawing.Point(0, 112);
+            this.DataGridViewFormRequest.MultiSelect = false;
             this.DataGridViewFormRequest.Name = "DataGridViewFormRequest";
             this.DataGridViewFormRequest.ReadOnly = true;
             this.DataGridViewFormRequest.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
@@ -144,14 +145,14 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.DataGridViewFormRequest.Size = new System.Drawing.Size(848, 195);
             this.DataGridViewFormRequest.TabIndex = 11;
             // 
-            // label2
+            // labelTimeNow
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 83);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(106, 13);
-            this.label2.TabIndex = 12;
-            this.label2.Text = "20.11.2021 12:32:12";
+            this.labelTimeNow.AutoSize = true;
+            this.labelTimeNow.Location = new System.Drawing.Point(12, 83);
+            this.labelTimeNow.Name = "labelTimeNow";
+            this.labelTimeNow.Size = new System.Drawing.Size(106, 13);
+            this.labelTimeNow.TabIndex = 12;
+            this.labelTimeNow.Text = "20.11.2021 12:32:12";
             // 
             // buttonDetails
             // 
@@ -331,7 +332,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.Controls.Add(this.labelLieferzeitSenden);
             this.Controls.Add(this.panelLieferzeitSenden);
             this.Controls.Add(this.buttonDetails);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.labelTimeNow);
             this.Controls.Add(this.DataGridViewFormRequest);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -356,7 +357,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.DataGridView DataGridViewFormRequest;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label labelTimeNow;
         private System.Windows.Forms.Button buttonDetails;
         private System.Windows.Forms.Panel panelLieferzeitSenden;
         private System.Windows.Forms.Button button15min;

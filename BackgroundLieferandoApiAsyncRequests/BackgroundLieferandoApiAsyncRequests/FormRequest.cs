@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
-using static BackgroundLieferandoApiAsyncRequests.OrdersExtension;
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
@@ -16,8 +15,8 @@ namespace BackgroundLieferandoApiAsyncRequests
         public FormRequest()
         {
             InitializeComponent();
-            backgroundWorker.WorkerReportsProgress = true;
-            backgroundWorker.WorkerSupportsCancellation = true;
+            backgroundWorker.WorkerReportsProgress = true; // TODO: false?
+            backgroundWorker.WorkerSupportsCancellation = true; // TODO: false?
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -49,6 +48,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 }
 
                 PopulateDataGridViewOrders(LieferandoOrders);
+                //UpdateStatusColors();
                 // TODO: post only if new
                 PostOwnOrders(LieferandoOrders);
                 Thread.Sleep(Properties.Settings.Default.OrdersInterval);
@@ -111,41 +111,45 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void button15min_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
         }
 
         private void button20min_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
         }
 
         private void button30min_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
         }
 
         private void button45min_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
         }
 
         private void button60min_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
         }
 
         private void buttonZubereitungStart_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 2, "");
         }
 
         private void buttonLieferungStart_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 3, "");
         }
         private void buttonLieferungAbschließen_Click(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 4, "");
+        }
+        private void DataGridViewFormRequest_SelectionChanged(object sender, EventArgs e)
+        {
+            UpdateStatusColors();
         }
 
         private void buttonDetails_Click(object sender, EventArgs e)
@@ -168,7 +172,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             GlobalDataTable.Columns.Add("Ort", typeof(string));
             GlobalDataTable.Columns.Add("Telefon", typeof(string));
             GlobalDataTable.Columns.Add("Summe", typeof(string));
-            GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO: Documentation Status 0,1,2,3, ...
+            GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO: no status encoding
             GlobalDataTable.Columns.Add("Kasse", typeof(string));
             GlobalDataTable.Columns.Add("Datum", typeof(string));
             // hidden information for FormDetails
@@ -203,6 +207,8 @@ namespace BackgroundLieferandoApiAsyncRequests
                 var selectedRows = GlobalDataTable.Select("Id = '" + order.id + "'");
                 if (selectedRows.Length != 0)
                     continue;
+
+                // code reached, only orders that are new to the data table will be added
                 // example, GlobalDataTable.Rows.Add(
                 // "12:32", "13:02",
                 // "Pieter Post",
@@ -210,13 +216,12 @@ namespace BackgroundLieferandoApiAsyncRequests
                 // "Enschede",
                 // "01600102",
                 // 4.00, 1, 1, "21/12/21");
-                var datetime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString());
-                // TODO maybe: use datetime.Date datetime.Time instead of splitting (but need to handle errors empty/wrong datetime)
-                var split_datetime = datetime.Split(' ');
+                var reqDeliverytime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), true);
                 GlobalDataTable.Rows.Add(
                     order.id,
-                    split_datetime[1], // TODO fix: orderDate as start time!
-                    "13:02", // TODO fix: requested delivery time as end time!// TODO: adding delivery time to start time // TODO: automatic delivery time
+                    order.orderDate.ToString("HH:mm:ss"), // TODO fix: orderDate as start time!
+                    reqDeliverytime, // TODO: adding delivery time to start time when clicking time buttons 
+                                    // TODO: automatic delivery time
                     order.customer.name,
                     order.customer.street + " " + order.customer.streetNumber,
                     order.customer.city,
@@ -224,7 +229,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                     order.totalPrice.ToString("0.00"),
                     0,
                     Properties.Settings.Default.Kasse,
-                    split_datetime[0],
+                    order.orderDate.ToString("dd/MM/yyyy"), // orderDate
                     order.customer.postalCode,
                     order.customer.extraAddressInfo,
                     (order.orderType == "delivery") ? "ja" : "nein",
@@ -235,11 +240,11 @@ namespace BackgroundLieferandoApiAsyncRequests
                     order.products,
                     order.discounts
                 );
-                // code reached 
                 // TODO: but not filtering specific orders that should be posted to our server
                 populated = true;
             }
             UpdateDataGridViewSource(GlobalDataTable);
+            UpdateStatusColors();
             return populated;
         }
 
@@ -264,9 +269,12 @@ namespace BackgroundLieferandoApiAsyncRequests
         // TODO: UpdateStatus in general -> post status update and update row color call
         // use with currently selected row
         //
-        private bool UpdateStatus()
+        private bool UpdateStatus(int currRowIdx,int status, string deliveryTime)
         {
-            // call PostUpdateStatus from ConsumeAPIs.cs
+            // TODO: switch status
+            GlobalDataTable.Rows[currRowIdx].SetField("Status", status);
+            // TODO: call PostUpdateStatus from ConsumeAPIs.cs, pass whats needed for json id key status ...
+            // overload methods? or dict?
             UpdateStatusColors();
             return true;
         }
@@ -285,30 +293,56 @@ namespace BackgroundLieferandoApiAsyncRequests
                 if (status == 0)
                 {
                     DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.White;
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.White;
                 }
                 // Status 1: The order was confirmed with a change in delivery time. (confirmed_change_delivery_time)
                 else if (status == 1) 
                 {
                     DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 192);
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 255, 192);
                 }
                 // Status 2: The restaurant started preparing the order. (kitchen)
                 else if (status == 2)
                 {
                     DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 192, 192);
                 }
                 // Status 3: The order is in delivery by a courier. (in_delivery)
                 else if (status == 3)
                 {
                     DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(192, 255, 192);
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(192, 255, 192);
                 }
                 // Status 4: The order has been delivered by a courier. (delivered)
                 else if (status == 4)
                 {
                     DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.DarkGray;
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.DarkGray;
                 }
+                // selected text color
+                DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionForeColor = Color.Black;
             }
         }
 
+        // Function to convert various string representations of dates and times to DateTime values
+        // and returns it in format "HH:mm:ss" if time set to true(default false). 
+        private string ConvertToOwnDateTime(string value, bool time = false)
+        {
+            try
+            {
+                if (time)
+                {
+                    return Convert.ToDateTime(value).ToString("HH:mm:ss");
+                }
+                return Convert.ToDateTime(value).ToString("dd/MM/yyyy HH:mm:ss");
+
+            }
+            catch (FormatException)
+            {
+                Console.WriteLine("'{0}' is not in the proper format.", value);
+                return string.Empty;
+            }
+        }
     }
 }
 

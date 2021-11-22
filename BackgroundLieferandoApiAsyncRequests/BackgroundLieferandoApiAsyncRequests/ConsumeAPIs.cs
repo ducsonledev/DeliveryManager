@@ -149,7 +149,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 discounts = new List<Discount>();
             }
             public string orderKey { get; set; }
-            public object requestedDeliveryTime { get; set; } // TODO maybe: instead of object, use DateTime as datatype
+            public object requestedDeliveryTime { get; set; } // object, because can be empty, flagged by Lieferando as "ASAP"
             public string orderType { get; set; }
             public double totalPrice { get; set; }
             public string remark { get; set; }
