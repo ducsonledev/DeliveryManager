@@ -22,21 +22,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             //BackgroundWorker worker = sender as BackgroundWorker;
-            // creating DataTable for our DataGridView
-            GlobalDataTable = new DataTable("TodaysOrders" + DateTime.Now);
-            GlobalDataTable.Columns.Add("Id", typeof(string));
-            GlobalDataTable.Columns.Add("Start", typeof(string));
-            GlobalDataTable.Columns.Add("Ende", typeof(string));
-            GlobalDataTable.Columns.Add("Name", typeof(string));
-            GlobalDataTable.Columns.Add("Straße", typeof(string));
-            GlobalDataTable.Columns.Add("Ort", typeof(string));
-            GlobalDataTable.Columns.Add("Telefon", typeof(string));
-            GlobalDataTable.Columns.Add("Summe", typeof(double));
-            GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO: Documentation Status 0,1,2,3, ...
-            GlobalDataTable.Columns.Add("Kasse", typeof(string));
-            GlobalDataTable.Columns.Add("Datum", typeof(string));
-            // hide columns for clear UI
-            GlobalDataTable.Columns[0].ColumnMapping = MappingType.Hidden;
+            InitializeGlobalDataTable();
             while (true)
             {
                 if (backgroundWorker.CancellationPending == true)
@@ -44,12 +30,14 @@ namespace BackgroundLieferandoApiAsyncRequests
                     e.Cancel = true;
                     return;
                 }
+
                 var LieferandoOrders = LieferandoRequest(
                     Properties.Settings.Default.RestaurantId,
                     Properties.Settings.Default.ApiKey,
                     Properties.Settings.Default.Username,
                     Properties.Settings.Default.Password
                     ); // credentials for testing sandboxapi
+
                 if (LieferandoOrders == null)
                 {
                     MessageBox.Show(
@@ -59,30 +47,8 @@ namespace BackgroundLieferandoApiAsyncRequests
                     return;
                 }
 
-                foreach (var order in LieferandoOrders.orders)
-                {
-                    var rows = GlobalDataTable.Select("Id = '" + order.id + "'");
-                    if (rows.Length != 0) // error, no column with id
-                        continue;
-                    // TODO: DataTable with hidden columns, so init all data in dataTable?
-                    //GlobalDataTable.Rows.Add(new TimeSpan(0, 12, 32), "13:02", "Pieter Post", "Brouwerstraat", "Enschede", "01600102", 4.00, 1, 1, new DateTime(2018, 5, 1));
-                    var datetime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString());
-                    var split_datetime = datetime.Split(' ');
-                    GlobalDataTable.Rows.Add(
-                        order.id,
-                        split_datetime[1], 
-                        "", 
-                        order.customer.name, 
-                        order.customer.street, 
-                        order.customer.city, 
-                        order.customer.phoneNumber, 
-                        order.totalPrice, 
-                        0, 
-                        1,
-                        split_datetime[0]
-                        );
-                }
-                this.UpdateDataGridViewSource(GlobalDataTable);
+                PopulateDataGridView(LieferandoOrders);
+                // TODO: post only if new
                 PostOwnOrders(LieferandoOrders);
                 Thread.Sleep(Properties.Settings.Default.OrdersInterval);
             }
@@ -90,6 +56,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // still for testing, should be changed when it works, but probably never reached?
             // First, handle the case where an exception was thrown.
             if (e.Error != null)
             {
@@ -108,6 +75,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
             resultLabel.TextAlign = ContentAlignment.MiddleCenter;
 
+            //for testing
             // Enable the Start button.
             btnStart.Enabled = true;
 
@@ -136,14 +104,47 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void FormRequest_Load(object sender, EventArgs e)
         {
-            //dataGridViewFormRequest.DataSource = GlobalDataTable;
             backgroundWorker.RunWorkerAsync();
-            resultLabel.Text = "Requesting orders from Lieferando!";
+            resultLabel.Text = "Requesting orders from Lieferando!"; // for testing
         }
 
+        private void button15min_Click(object sender, EventArgs e)
+        {
+            UpdateRowStatusColor();
+        }
+
+        private void button20min_Click(object sender, EventArgs e)
+        {
+            UpdateRowStatusColor();
+        }
+
+        private void button30min_Click(object sender, EventArgs e)
+        {
+            UpdateRowStatusColor();
+        }
+
+        private void button45min_Click(object sender, EventArgs e)
+        {
+            UpdateRowStatusColor();
+        }
+
+        private void button60min_Click(object sender, EventArgs e)
+        {
+            UpdateRowStatusColor();
+        }
+
+        private void buttonZubereitungStart_Click(object sender, EventArgs e)
+        {
+            UpdateRowStatusColor();
+        }
+
+        private void buttonLieferungStart_Click(object sender, EventArgs e)
+        {
+            UpdateRowStatusColor();
+        }
         private void buttonLieferungAbschließen_Click(object sender, EventArgs e)
         {
-
+            UpdateRowStatusColor();
         }
 
         private void buttonDetails_Click(object sender, EventArgs e)
@@ -152,22 +153,120 @@ namespace BackgroundLieferandoApiAsyncRequests
             formDetails.ShowDialog();
         }
 
+        private void InitializeGlobalDataTable()
+        {
+            // creating DataTable for our DataGridView
+            GlobalDataTable = new DataTable("TodaysOrders" + DateTime.Now);
+            GlobalDataTable.Columns.Add("Id", typeof(string));
+            GlobalDataTable.Columns.Add("Start", typeof(string));
+            GlobalDataTable.Columns.Add("Ende", typeof(string));
+            GlobalDataTable.Columns.Add("Name", typeof(string));
+            GlobalDataTable.Columns.Add("Straße", typeof(string));
+            GlobalDataTable.Columns.Add("Ort", typeof(string));
+            GlobalDataTable.Columns.Add("Telefon", typeof(string));
+            GlobalDataTable.Columns.Add("Summe", typeof(double));
+            GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO: Documentation Status 0,1,2,3, ...
+            GlobalDataTable.Columns.Add("Kasse", typeof(string));
+            GlobalDataTable.Columns.Add("Datum", typeof(string));
+            // hide columns for clearer UI
+            GlobalDataTable.Columns[0].ColumnMapping = MappingType.Hidden;
+
+            // TODO: more information for FormDetails
+        }
+
+        private bool PopulateDataGridView(LieferandoOrders lieferandoOrders)
+        {
+            bool populated = false;
+            foreach (var order in lieferandoOrders.orders)
+            {
+                var selectedRows = GlobalDataTable.Select("Id = '" + order.id + "'");
+                if (selectedRows.Length != 0)
+                    continue;
+                // example, GlobalDataTable.Rows.Add(
+                // "12:32", "13:02",
+                // "Pieter Post",
+                // "Brouwerstraat",
+                // "Enschede",
+                // "01600102",
+                // 4.00, 1, 1, "21/12/21");
+                var datetime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString());
+                var split_datetime = datetime.Split(' ');
+                GlobalDataTable.Rows.Add(
+                    order.id,
+                    split_datetime[1],
+                    "13:02",
+                    order.customer.name,
+                    order.customer.street,
+                    order.customer.city,
+                    order.customer.phoneNumber,
+                    order.totalPrice,
+                    0,
+                    Properties.Settings.Default.Kasse,
+                    split_datetime[0]
+                    );
+                // code reached 
+                // TODO: but not filtering specific orders that should be posted to our server
+                populated = true;
+            }
+            UpdateDataGridViewSource(GlobalDataTable);
+            return populated;
+        }
+
         // create a method to handle updating the datasource
-        // https://stackoverflow.com/questions/52992223/c-sharp-update-datagridview-from-backgroundworker
+        // Layout: https://stackoverflow.com/questions/52992223/c-sharp-update-datagridview-from-backgroundworker
         public void UpdateDataGridViewSource(object data)
         {
             // check if we need to swap thread context
-            if (this.dataGridViewFormRequest.InvokeRequired)
+            if (DataGridViewFormRequest.InvokeRequired)
             {
                 // we aren't on the UI thread. Ask the UI thread to do stuff.
-                this.dataGridViewFormRequest.Invoke(new Action(() => UpdateDataGridViewSource(data)));
+                DataGridViewFormRequest.Invoke(new Action(() => UpdateDataGridViewSource(data)));
             }
             else
             {
                 // we are on the UI thread. We are free to touch things.
-                this.dataGridViewFormRequest.DataSource = data;
-                //this.dataGridView.DataBind();
+                DataGridViewFormRequest.DataSource = data;
             }
         }
+
+        // Highlights the rows in specific color according to the changes in status send to Lieferando.
+        // Documentation: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datagridview.selectionchanged?redirectedfrom=MSDN&view=windowsdesktop-6.0
+        private void UpdateRowStatusColor()
+        {
+            int status;
+            // Iterate through the rows.
+            for (int i = 0; i < DataGridViewFormRequest.Rows.Count; i++)
+            {
+                status = int.Parse(DataGridViewFormRequest.Rows[i].Cells["Status"].Value.ToString());
+
+                // Status 0: The order was printed by a restaurant. (printed)
+                if (status == 0)
+                {
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.White;
+                }
+                // Status 1: The order was confirmed with a change in delivery time. (confirmed_change_delivery_time)
+                else if (status == 1) 
+                {
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 192);
+                }
+                // Status 2: The restaurant started preparing the order. (kitchen)
+                else if (status == 2)
+                {
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                }
+                // Status 3: The order is in delivery by a courier. (in_delivery)
+                else if (status == 3)
+                {
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(192, 255, 192);
+                }
+                // Status 4: The order has been delivered by a courier. (delivered)
+                else if (status == 4)
+                {
+                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.DarkGray;
+                }
+            }
+        }
+
     }
 }
+

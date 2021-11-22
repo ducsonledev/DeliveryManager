@@ -130,5 +130,14 @@ namespace BackgroundLieferandoApiAsyncRequests.Properties {
                 return ((global::System.TimeSpan)(this["OrdersInterval"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int Kasse {
+            get {
+                return ((int)(this["Kasse"]));
+            }
+        }
     }
 }

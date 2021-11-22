@@ -220,7 +220,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             var clientPost = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567"); // temp test adress // TODO later: Please add server adresse with Port 13000.
             var requestPostOrd = new RestRequest(Method.POST);
             IRestResponse responsePost = null;
-
+            // TODO: filter, change parameter in function to single order that is checked if new
             // sending orders seperately for now
             var ownOrders = LieferandoOrders.ToOwnOrder();
             foreach (var ownOrder in ownOrders)

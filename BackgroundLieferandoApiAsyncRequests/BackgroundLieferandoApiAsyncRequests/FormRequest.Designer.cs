@@ -29,14 +29,14 @@ namespace BackgroundLieferandoApiAsyncRequests
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.btnStart = new System.Windows.Forms.Button();
             this.resultLabel = new System.Windows.Forms.Label();
             this.btnCancel = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.dataGridViewFormRequest = new System.Windows.Forms.DataGridView();
+            this.DataGridViewFormRequest = new System.Windows.Forms.DataGridView();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonDetails = new System.Windows.Forms.Button();
             this.panelLieferzeitSenden = new System.Windows.Forms.Panel();
@@ -53,7 +53,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonLieferungStart = new System.Windows.Forms.Button();
             this.buttonLieferungAbschließen = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFormRequest)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridViewFormRequest)).BeginInit();
             this.panelLieferzeitSenden.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -116,32 +116,33 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.panel1.Size = new System.Drawing.Size(383, 107);
             this.panel1.TabIndex = 10;
             // 
-            // dataGridViewFormRequest
+            // DataGridViewFormRequest
             // 
-            this.dataGridViewFormRequest.AllowUserToAddRows = false;
-            this.dataGridViewFormRequest.AllowUserToDeleteRows = false;
-            this.dataGridViewFormRequest.AllowUserToResizeColumns = false;
-            this.dataGridViewFormRequest.AllowUserToResizeRows = false;
-            this.dataGridViewFormRequest.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewFormRequest.BackgroundColor = System.Drawing.SystemColors.ControlLight;
-            this.dataGridViewFormRequest.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridViewFormRequest.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
-            this.dataGridViewFormRequest.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            this.dataGridViewFormRequest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewFormRequest.GridColor = System.Drawing.Color.Black;
-            this.dataGridViewFormRequest.Location = new System.Drawing.Point(0, 112);
-            this.dataGridViewFormRequest.Name = "dataGridViewFormRequest";
-            this.dataGridViewFormRequest.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.ControlDark;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridViewFormRequest.Size = new System.Drawing.Size(848, 171);
-            this.dataGridViewFormRequest.TabIndex = 11;
+            this.DataGridViewFormRequest.AllowUserToAddRows = false;
+            this.DataGridViewFormRequest.AllowUserToDeleteRows = false;
+            this.DataGridViewFormRequest.AllowUserToResizeColumns = false;
+            this.DataGridViewFormRequest.AllowUserToResizeRows = false;
+            this.DataGridViewFormRequest.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGridViewFormRequest.BackgroundColor = System.Drawing.SystemColors.ControlLight;
+            this.DataGridViewFormRequest.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.DataGridViewFormRequest.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
+            this.DataGridViewFormRequest.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.DataGridViewFormRequest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridViewFormRequest.GridColor = System.Drawing.Color.Black;
+            this.DataGridViewFormRequest.Location = new System.Drawing.Point(0, 112);
+            this.DataGridViewFormRequest.Name = "DataGridViewFormRequest";
+            this.DataGridViewFormRequest.ReadOnly = true;
+            this.DataGridViewFormRequest.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlDark;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.DataGridViewFormRequest.Size = new System.Drawing.Size(848, 171);
+            this.DataGridViewFormRequest.TabIndex = 11;
             // 
             // label2
             // 
@@ -191,6 +192,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.button15min.TabIndex = 15;
             this.button15min.Text = "15 min";
             this.button15min.UseVisualStyleBackColor = false;
+            this.button15min.Click += new System.EventHandler(this.button15min_Click);
             // 
             // button60min
             // 
@@ -202,6 +204,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.button60min.TabIndex = 19;
             this.button60min.Text = "60 min";
             this.button60min.UseVisualStyleBackColor = false;
+            this.button60min.Click += new System.EventHandler(this.button60min_Click);
             // 
             // button45min
             // 
@@ -213,6 +216,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.button45min.TabIndex = 21;
             this.button45min.Text = "45 min";
             this.button45min.UseVisualStyleBackColor = false;
+            this.button45min.Click += new System.EventHandler(this.button45min_Click);
             // 
             // button20min
             // 
@@ -224,6 +228,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.button20min.TabIndex = 18;
             this.button20min.Text = "20 min";
             this.button20min.UseVisualStyleBackColor = false;
+            this.button20min.Click += new System.EventHandler(this.button20min_Click);
             // 
             // button30min
             // 
@@ -235,6 +240,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.button30min.TabIndex = 20;
             this.button30min.Text = "30 min";
             this.button30min.UseVisualStyleBackColor = false;
+            this.button30min.Click += new System.EventHandler(this.button30min_Click);
             // 
             // labelLieferzeitSenden
             // 
@@ -284,6 +290,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonZubereitungStart.TabIndex = 26;
             this.buttonZubereitungStart.Text = "Zubereitung starten";
             this.buttonZubereitungStart.UseVisualStyleBackColor = false;
+            this.buttonZubereitungStart.Click += new System.EventHandler(this.buttonZubereitungStart_Click);
             // 
             // buttonLieferungStart
             // 
@@ -295,15 +302,18 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonLieferungStart.TabIndex = 27;
             this.buttonLieferungStart.Text = "Lieferung starten";
             this.buttonLieferungStart.UseVisualStyleBackColor = false;
+            this.buttonLieferungStart.Click += new System.EventHandler(this.buttonLieferungStart_Click);
             // 
             // buttonLieferungAbschließen
             // 
+            this.buttonLieferungAbschließen.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.buttonLieferungAbschließen.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.buttonLieferungAbschließen.Location = new System.Drawing.Point(709, 17);
             this.buttonLieferungAbschließen.Name = "buttonLieferungAbschließen";
             this.buttonLieferungAbschließen.Size = new System.Drawing.Size(128, 68);
             this.buttonLieferungAbschließen.TabIndex = 28;
             this.buttonLieferungAbschließen.Text = "Lieferung abschließen";
-            this.buttonLieferungAbschließen.UseVisualStyleBackColor = true;
+            this.buttonLieferungAbschließen.UseVisualStyleBackColor = false;
             this.buttonLieferungAbschließen.Click += new System.EventHandler(this.buttonLieferungAbschließen_Click);
             // 
             // FormRequest
@@ -322,7 +332,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.Controls.Add(this.panelLieferzeitSenden);
             this.Controls.Add(this.buttonDetails);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.dataGridViewFormRequest);
+            this.Controls.Add(this.DataGridViewFormRequest);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "FormRequest";
@@ -331,7 +341,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.Load += new System.EventHandler(this.FormRequest_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewFormRequest)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridViewFormRequest)).EndInit();
             this.panelLieferzeitSenden.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -345,7 +355,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.DataGridView dataGridViewFormRequest;
+        private System.Windows.Forms.DataGridView DataGridViewFormRequest;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonDetails;
         private System.Windows.Forms.Panel panelLieferzeitSenden;

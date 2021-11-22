@@ -38,5 +38,8 @@
     <Setting Name="OrdersInterval" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">00:00:10</Value>
     </Setting>
+    <Setting Name="Kasse" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
