@@ -29,6 +29,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.btnStart = new System.Windows.Forms.Button();
@@ -47,11 +48,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.button30min = new System.Windows.Forms.Button();
             this.labelLieferzeitSenden = new System.Windows.Forms.Label();
             this.checkBoxLieferzeit = new System.Windows.Forms.CheckBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.buttonZubereitungStart = new System.Windows.Forms.Button();
             this.buttonLieferungStart = new System.Windows.Forms.Button();
             this.buttonLieferungAbschließen = new System.Windows.Forms.Button();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridViewFormRequest)).BeginInit();
             this.panelLieferzeitSenden.SuspendLayout();
@@ -257,29 +257,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.checkBoxLieferzeit.AutoSize = true;
             this.checkBoxLieferzeit.Location = new System.Drawing.Point(133, 89);
             this.checkBoxLieferzeit.Name = "checkBoxLieferzeit";
-            this.checkBoxLieferzeit.Size = new System.Drawing.Size(156, 17);
+            this.checkBoxLieferzeit.Size = new System.Drawing.Size(305, 17);
             this.checkBoxLieferzeit.TabIndex = 23;
-            this.checkBoxLieferzeit.Text = "Automatische Lieferzeit von";
+            this.checkBoxLieferzeit.Text = "Automatische Statusänderung aktivieren (Lieferzeit: 30 min)";
             this.checkBoxLieferzeit.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.BackColor = System.Drawing.SystemColors.Info;
-            this.textBox1.Location = new System.Drawing.Point(286, 87);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(35, 20);
-            this.textBox1.TabIndex = 24;
-            this.textBox1.Text = "30";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(324, 90);
-            this.label3.Margin = new System.Windows.Forms.Padding(0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(23, 13);
-            this.label3.TabIndex = 25;
-            this.label3.Text = "min";
             // 
             // buttonZubereitungStart
             // 
@@ -317,6 +298,12 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonLieferungAbschließen.UseVisualStyleBackColor = false;
             this.buttonLieferungAbschließen.Click += new System.EventHandler(this.buttonLieferungAbschließen_Click);
             // 
+            // timer
+            // 
+            this.timer.Enabled = true;
+            this.timer.Interval = 1000;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
             // FormRequest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -326,8 +313,6 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.Controls.Add(this.buttonLieferungAbschließen);
             this.Controls.Add(this.buttonLieferungStart);
             this.Controls.Add(this.buttonZubereitungStart);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.checkBoxLieferzeit);
             this.Controls.Add(this.labelLieferzeitSenden);
             this.Controls.Add(this.panelLieferzeitSenden);
@@ -367,11 +352,10 @@ namespace BackgroundLieferandoApiAsyncRequests
         private System.Windows.Forms.Button button30min;
         private System.Windows.Forms.Label labelLieferzeitSenden;
         private System.Windows.Forms.CheckBox checkBoxLieferzeit;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button buttonZubereitungStart;
         private System.Windows.Forms.Button buttonLieferungStart;
         private System.Windows.Forms.Button buttonLieferungAbschließen;
+        private System.Windows.Forms.Timer timer;
     }
 }
 

@@ -83,6 +83,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.Zusatz});
             this.DataGridViewFormDetails.GridColor = System.Drawing.Color.Black;
             this.DataGridViewFormDetails.Location = new System.Drawing.Point(-43, 88);
+            this.DataGridViewFormDetails.MultiSelect = false;
             this.DataGridViewFormDetails.Name = "DataGridViewFormDetails";
             this.DataGridViewFormDetails.ReadOnly = true;
             this.DataGridViewFormDetails.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;

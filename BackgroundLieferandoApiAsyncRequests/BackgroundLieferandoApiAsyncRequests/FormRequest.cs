@@ -106,6 +106,8 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void FormRequest_Load(object sender, EventArgs e)
         {
             backgroundWorker.RunWorkerAsync();
+            // for changing enable state of buttons to send status of orders
+            DataGridViewFormRequest.SelectionChanged += DataGridViewFormRequest_SelectionChanged;
             resultLabel.Text = "Requesting orders from Lieferando!"; // for testing
         }
 
@@ -147,15 +149,22 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 4, "");
         }
-        private void DataGridViewFormRequest_SelectionChanged(object sender, EventArgs e)
-        {
-            UpdateStatusColors();
-        }
 
         private void buttonDetails_Click(object sender, EventArgs e)
         {
             var formDetails = new FormDetails(GlobalDataTable, DataGridViewFormRequest.CurrentCell.RowIndex);
             formDetails.ShowDialog();
+        }
+
+        private void DataGridViewFormRequest_SelectionChanged(object sender, EventArgs e)
+        {
+            // Zero state handling
+            if (DataGridViewFormRequest == null)
+                return;
+
+            // To manage to ability to only send certain status orders based on current status of the selected row.
+            int status = int.Parse(DataGridViewFormRequest.Rows[DataGridViewFormRequest.CurrentCell.RowIndex].Cells["Status"].Value.ToString());
+            UpdateButtonsEnableState(status);
         }
 
         private void InitializeGlobalDataTable()
@@ -209,27 +218,20 @@ namespace BackgroundLieferandoApiAsyncRequests
                     continue;
 
                 // code reached, only orders that are new to the data table will be added
-                // example, GlobalDataTable.Rows.Add(
-                // "12:32", "13:02",
-                // "Pieter Post",
-                // "Brouwerstraat",
-                // "Enschede",
-                // "01600102",
-                // 4.00, 1, 1, "21/12/21");
                 var reqDeliverytime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), true);
                 GlobalDataTable.Rows.Add(
                     order.id,
-                    order.orderDate.ToString("HH:mm:ss"), // TODO fix: orderDate as start time!
+                    order.orderDate.ToString("HH:mm:ss"),
                     reqDeliverytime, // TODO: adding delivery time to start time when clicking time buttons 
-                                    // TODO: automatic delivery time
+                                     // TODO: automatic delivery time
                     order.customer.name,
                     order.customer.street + " " + order.customer.streetNumber,
                     order.customer.city,
                     order.customer.phoneNumber,
                     order.totalPrice.ToString("0.00"),
-                    0,
+                    InitializeStatus(reqDeliverytime),
                     Properties.Settings.Default.Kasse,
-                    order.orderDate.ToString("dd/MM/yyyy"), // orderDate
+                    order.orderDate.ToString("dd/MM/yyyy"),
                     order.customer.postalCode,
                     order.customer.extraAddressInfo,
                     (order.orderType == "delivery") ? "ja" : "nein",
@@ -262,6 +264,8 @@ namespace BackgroundLieferandoApiAsyncRequests
             {
                 // we are on the UI thread. We are free to touch things.
                 DataGridViewFormRequest.DataSource = data;
+                // Resize the DataGridView columns to fit the newly loaded data.
+                DataGridViewFormRequest.AutoResizeColumns();
             }
         }
 
@@ -269,14 +273,16 @@ namespace BackgroundLieferandoApiAsyncRequests
         // TODO: UpdateStatus in general -> post status update and update row color call
         // use with currently selected row
         //
-        private bool UpdateStatus(int currRowIdx,int status, string deliveryTime)
+        private bool UpdateStatus(int currRowIdx, int status, string deliveryTime)
         {
+            bool success = true; // post successfully send
             // TODO: switch status
             GlobalDataTable.Rows[currRowIdx].SetField("Status", status);
             // TODO: call PostUpdateStatus from ConsumeAPIs.cs, pass whats needed for json id key status ...
             // overload methods? or dict?
             UpdateStatusColors();
-            return true;
+            if(success) UpdateButtonsEnableState(status);
+            return success;
         }
 
         // Highlights the rows in specific color according to the changes in status send to Lieferando.
@@ -288,39 +294,88 @@ namespace BackgroundLieferandoApiAsyncRequests
             for (int i = 0; i < DataGridViewFormRequest.Rows.Count; i++)
             {
                 status = int.Parse(DataGridViewFormRequest.Rows[i].Cells["Status"].Value.ToString());
-                // TODO: switch(better code design)?
-                // Status 0: The order was printed by a restaurant. (printed)
-                if (status == 0)
+                switch (status)
                 {
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.White;
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.White;
+                    // Status 0: The order was printed by a restaurant. (printed)
+                    case 0:
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.White;
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.White;
+                        break;
+                    // Status 1: The order was confirmed with a change in delivery time. (confirmed_change_delivery_time)
+                    case 1:
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 192);
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 255, 192);
+                        break;
+                    // Status 2: The restaurant started preparing the order. (kitchen)
+                    case 2:
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 192, 192);
+                        break;
+                    // Status 3: The order is in delivery by a courier. (in_delivery)
+                    case 3:
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(192, 255, 192);
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(192, 255, 192);
+                        break;
+                    // Status 4: The order has been delivered by a courier. (delivered)
+                    case 4:
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.DarkGray;
+                        DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.DarkGray;
+                        break;
+
+                    default:
+                        break;
                 }
-                // Status 1: The order was confirmed with a change in delivery time. (confirmed_change_delivery_time)
-                else if (status == 1) 
-                {
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 255, 192);
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 255, 192);
-                }
-                // Status 2: The restaurant started preparing the order. (kitchen)
-                else if (status == 2)
-                {
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(255, 192, 192);
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(255, 192, 192);
-                }
-                // Status 3: The order is in delivery by a courier. (in_delivery)
-                else if (status == 3)
-                {
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.FromArgb(192, 255, 192);
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.FromArgb(192, 255, 192);
-                }
-                // Status 4: The order has been delivered by a courier. (delivered)
-                else if (status == 4)
-                {
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.BackColor = Color.DarkGray;
-                    DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionBackColor = Color.DarkGray;
-                }
-                // selected text color
+                // To make sure color on selection is black.
                 DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionForeColor = Color.Black;
+            }
+        }
+
+        private void UpdateButtonsEnableState(int status)
+        {
+            switch (status)
+            {
+                // Status 0: The order was printed by a restaurant. (printed)
+                case 0:
+                    panelLieferzeitSenden.Enabled = true;
+                    buttonZubereitungStart.Enabled = false;
+                    buttonLieferungStart.Enabled = false;
+                    buttonLieferungAbschließen.Enabled = false;
+                    break;
+                // Status 1: The order was confirmed with a change in delivery time. (confirmed_change_delivery_time)
+                case 1:
+                    panelLieferzeitSenden.Enabled = false;
+                    buttonZubereitungStart.Enabled = true;
+                    buttonLieferungStart.Enabled = false;
+                    buttonLieferungAbschließen.Enabled = false;
+                    break;
+                // Status 2: The restaurant started preparing the order. (kitchen)
+                case 2:
+                    panelLieferzeitSenden.Enabled = false;
+                    buttonZubereitungStart.Enabled = false;
+                    buttonLieferungStart.Enabled = true;
+                    buttonLieferungAbschließen.Enabled = false;
+                    break;
+                // Status 3: The order is in delivery by a courier. (in_delivery)
+                case 3:
+                    panelLieferzeitSenden.Enabled = false;
+                    buttonZubereitungStart.Enabled = false;
+                    buttonLieferungStart.Enabled = false;
+                    buttonLieferungAbschließen.Enabled = true;
+                    break;
+                // Status 4: The order has been delivered by a courier. (delivered)
+                case 4:
+                    panelLieferzeitSenden.Enabled = false;
+                    buttonZubereitungStart.Enabled = false;
+                    buttonLieferungStart.Enabled = false;
+                    buttonLieferungAbschließen.Enabled = false;
+                    break;
+
+                default:
+                    panelLieferzeitSenden.Enabled = false;
+                    buttonZubereitungStart.Enabled = false;
+                    buttonLieferungStart.Enabled = false;
+                    buttonLieferungAbschließen.Enabled = false;
+                    break;
             }
         }
 
@@ -330,12 +385,8 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             try
             {
-                if (time)
-                {
-                    return Convert.ToDateTime(value).ToString("HH:mm:ss");
-                }
-                return Convert.ToDateTime(value).ToString("dd/MM/yyyy HH:mm:ss");
-
+                return time ? Convert.ToDateTime(value).ToString("HH:mm:ss") :
+                    Convert.ToDateTime(value).ToString("dd/MM/yyyy HH:mm:ss");
             }
             catch (FormatException)
             {
@@ -343,6 +394,23 @@ namespace BackgroundLieferandoApiAsyncRequests
                 return string.Empty;
             }
         }
+
+        // TODO maybe: no status encoding
+        private int InitializeStatus(string reqDeliveryTime)
+        {
+            // Post Update Status when 1
+            return reqDeliveryTime == string.Empty ? 0 : 1; // 0 "Neu eingegangen" : 1 "Lieferzeit mitgeteilt";
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            labelTimeNow.Text = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+        }
+
+        //
+        // TODO: Automatische Statusänderung nach Schema
+        // -> TODO: Schema überlegen. (f.e. Lieferzeit 30, nach 10 min Lieferung starten)
+        //
     }
 }
 

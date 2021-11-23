@@ -25,6 +25,11 @@ namespace BackgroundLieferandoApiAsyncRequests
             textBoxBezahlt.Text = dt.Rows[currRowIdx].Field<string>("Bezahlt");
 
             PopulateDataGridViewProducts(dt, currRowIdx);
+            // Resize the DataGridView columns to fit the newly loaded data.
+            DataGridViewFormDetails.AutoResizeColumns();
+            // No highlighting seen with selection.
+            DataGridViewFormDetails.DefaultCellStyle.SelectionBackColor = DataGridViewFormDetails.DefaultCellStyle.BackColor;
+            DataGridViewFormDetails.DefaultCellStyle.SelectionForeColor = DataGridViewFormDetails.DefaultCellStyle.ForeColor;
         }
 
         private void PopulateDataGridViewProducts(DataTable dt, int currRowIdx)
@@ -62,6 +67,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 }
             }
         }
+
         private void buttonZurück_Click(object sender, EventArgs e)
         {
             Close();
