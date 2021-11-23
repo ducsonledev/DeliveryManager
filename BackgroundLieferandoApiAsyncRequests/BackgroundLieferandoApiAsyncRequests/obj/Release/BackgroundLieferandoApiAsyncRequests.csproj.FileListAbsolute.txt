@@ -12,3 +12,6 @@ C:\Users\Son\Desktop\Arbeitsplatz\AIM\aimIT\BackgroundLieferandoApiAsyncRequests
 C:\Users\Son\Desktop\Arbeitsplatz\AIM\aimIT\BackgroundLieferandoApiAsyncRequests\BackgroundLieferandoApiAsyncRequests\obj\Release\BackgroundLieferandoApiAsyncRequests.csproj.CoreCompileInputs.cache
 C:\Users\Son\Desktop\Arbeitsplatz\AIM\aimIT\BackgroundLieferandoApiAsyncRequests\BackgroundLieferandoApiAsyncRequests\obj\Release\BackgroundLieferandoApiAsyncRequests.exe
 C:\Users\Son\Desktop\Arbeitsplatz\AIM\aimIT\BackgroundLieferandoApiAsyncRequests\BackgroundLieferandoApiAsyncRequests\obj\Release\BackgroundLieferandoApiAsyncRequests.pdb
+C:\Users\Son\Desktop\Arbeitsplatz\AIM\aimIT\BackgroundLieferandoApiAsyncRequests\BackgroundLieferandoApiAsyncRequests\bin\Release\Dapper.dll
+C:\Users\Son\Desktop\Arbeitsplatz\AIM\aimIT\BackgroundLieferandoApiAsyncRequests\BackgroundLieferandoApiAsyncRequests\bin\Release\Dapper.xml
+C:\Users\Son\Desktop\Arbeitsplatz\AIM\aimIT\BackgroundLieferandoApiAsyncRequests\BackgroundLieferandoApiAsyncRequests\obj\Release\BackgroundLieferandoApiAsyncRequests.FormDetails.resources

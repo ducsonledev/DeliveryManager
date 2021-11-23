@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="yes"?>
+<DocumentElement>
+  <TodaysOrders2021-11-23T19Z26Z07>
+    <Start>19:15:00</Start>
+    <Ende>19:45:00</Ende>
+    <Name>Pieter Post</Name>
+    <Straße>Brouwerijstraat 10</Straße>
+    <Ort>Enschede</Ort>
+    <Telefon>061234568</Telefon>
+    <Summe>4,00</Summe>
+    <Status>2</Status>
+    <Kasse>1</Kasse>
+    <Datum>04.08.2017</Datum>
+  </TodaysOrders2021-11-23T19Z26Z07>
+  <TodaysOrders2021-11-23T19Z26Z07>
+    <Start>12:45:22</Start>
+    <Ende>13:00:22</Ende>
+    <Name>Pieter Post</Name>
+    <Straße>Brouwerijstraat 10</Straße>
+    <Ort>Enschede</Ort>
+    <Telefon>061234568</Telefon>
+    <Summe>34,00</Summe>
+    <Status>3</Status>
+    <Kasse>1</Kasse>
+    <Datum>10.06.2020</Datum>
+  </TodaysOrders2021-11-23T19Z26Z07>
+  <TodaysOrders2021-11-23T19Z26Z07>
+    <Start>12:47:35</Start>
+    <Ende>13:47:35</Ende>
+    <Name>Pieter Post</Name>
+    <Straße>Brouwerijstraat 10</Straße>
+    <Ort>Enschede</Ort>
+    <Telefon>061234568</Telefon>
+    <Summe>50,70</Summe>
+    <Status>4</Status>
+    <Kasse>1</Kasse>
+    <Datum>10.06.2020</Datum>
+  </TodaysOrders2021-11-23T19Z26Z07>
+</DocumentElement>

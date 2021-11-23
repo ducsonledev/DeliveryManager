@@ -46,7 +46,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                     e.Cancel = true;
                     return;
                 }
-
+                // TODO: call only if new orders
                 PopulateDataGridViewOrders(LieferandoOrders);
                 //UpdateStatusColors();
                 // TODO: post only if new
@@ -108,46 +108,56 @@ namespace BackgroundLieferandoApiAsyncRequests
             backgroundWorker.RunWorkerAsync();
             // for changing enable state of buttons to send status of orders
             DataGridViewFormRequest.SelectionChanged += DataGridViewFormRequest_SelectionChanged;
+            // event handling for closing this form
+            Closing += FormRequest_Closing;
             resultLabel.Text = "Requesting orders from Lieferando!"; // for testing
+        }
+
+        private void FormRequest_Closing(object sender, CancelEventArgs e)
+        {
+            MessageBox.Show("Closing form!");
+            
+            GlobalDataTable.WriteXml(GlobalDataTable.TableName + ".xml");
+            GlobalDataTable.ReadXml(GlobalDataTable.TableName + ".xml");
         }
 
         private void button15min_Click(object sender, EventArgs e)
         {
-            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
+            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 15, 0));
         }
 
         private void button20min_Click(object sender, EventArgs e)
         {
-            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
+            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 20, 0));
         }
 
         private void button30min_Click(object sender, EventArgs e)
         {
-            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
+            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 30, 0));
         }
 
         private void button45min_Click(object sender, EventArgs e)
         {
-            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
+            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 45, 0));
         }
 
         private void button60min_Click(object sender, EventArgs e)
         {
-            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 1, "");
+            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(1, 0, 0));
         }
 
         private void buttonZubereitungStart_Click(object sender, EventArgs e)
         {
-            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 2, "");
+            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 2, TimeSpan.Zero);
         }
 
         private void buttonLieferungStart_Click(object sender, EventArgs e)
         {
-            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 3, "");
+            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 3, TimeSpan.Zero);
         }
         private void buttonLieferungAbschließen_Click(object sender, EventArgs e)
         {
-            UpdateStatus(DataGridViewFormRequest.CurrentCell.RowIndex, 4, "");
+            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 4, TimeSpan.Zero);
         }
 
         private void buttonDetails_Click(object sender, EventArgs e)
@@ -170,7 +180,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void InitializeGlobalDataTable()
         {
             // creating DataTable for our DataGridView
-            GlobalDataTable = new DataTable("TodaysOrders" + DateTime.Now.Date);
+            GlobalDataTable = new DataTable("TodaysOrders" + DateTime.Now.ToString("s").Replace(":","Z"));
             // identify orders
             GlobalDataTable.Columns.Add("Id", typeof(string));
             // DataGridView headers
@@ -181,7 +191,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             GlobalDataTable.Columns.Add("Ort", typeof(string));
             GlobalDataTable.Columns.Add("Telefon", typeof(string));
             GlobalDataTable.Columns.Add("Summe", typeof(string));
-            GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO: no status encoding
+            GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO maybe better: no status encoding
             GlobalDataTable.Columns.Add("Kasse", typeof(string));
             GlobalDataTable.Columns.Add("Datum", typeof(string));
             // hidden information for FormDetails
@@ -194,9 +204,13 @@ namespace BackgroundLieferandoApiAsyncRequests
             GlobalDataTable.Columns.Add("Bezahlt", typeof(string));
             GlobalDataTable.Columns.Add("Produkte", typeof(List<Product>));
             GlobalDataTable.Columns.Add("Rabattgutscheine", typeof(List<Discount>));
+            // for json of status updates
+            GlobalDataTable.Columns.Add("Key", typeof(string));
+            GlobalDataTable.Columns.Add("EndDateTime", typeof(string));
 
             // hide columns for clearer UI, only show necessary headers to the user
             GlobalDataTable.Columns[0].ColumnMapping = MappingType.Hidden;
+            // hidden information for FormDetails
             GlobalDataTable.Columns[11].ColumnMapping = MappingType.Hidden;
             GlobalDataTable.Columns[12].ColumnMapping = MappingType.Hidden;
             GlobalDataTable.Columns[13].ColumnMapping = MappingType.Hidden;
@@ -206,6 +220,9 @@ namespace BackgroundLieferandoApiAsyncRequests
             GlobalDataTable.Columns[17].ColumnMapping = MappingType.Hidden;
             GlobalDataTable.Columns[18].ColumnMapping = MappingType.Hidden;
             GlobalDataTable.Columns[19].ColumnMapping = MappingType.Hidden;
+            // hide info for json of status updates
+            GlobalDataTable.Columns[20].ColumnMapping = MappingType.Hidden;
+            GlobalDataTable.Columns[21].ColumnMapping = MappingType.Hidden;
         }
 
         private bool PopulateDataGridViewOrders(LieferandoOrders lieferandoOrders)
@@ -218,12 +235,12 @@ namespace BackgroundLieferandoApiAsyncRequests
                     continue;
 
                 // code reached, only orders that are new to the data table will be added
-                var reqDeliverytime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), true);
+                var reqDeliverytime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), "timeonly");
+                var reqDeliveryLieferandoTime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), "lieferando");
                 GlobalDataTable.Rows.Add(
                     order.id,
                     order.orderDate.ToString("HH:mm:ss"),
-                    reqDeliverytime, // TODO: adding delivery time to start time when clicking time buttons 
-                                     // TODO: automatic delivery time
+                    reqDeliverytime, // TODO later: adding automatic delivery time
                     order.customer.name,
                     order.customer.street + " " + order.customer.streetNumber,
                     order.customer.city,
@@ -240,7 +257,9 @@ namespace BackgroundLieferandoApiAsyncRequests
                     order.remark,
                     order.isPaid ? "ja" : "nein",
                     order.products,
-                    order.discounts
+                    order.discounts,
+                    order.orderKey,
+                    reqDeliveryLieferandoTime
                 );
                 // TODO: but not filtering specific orders that should be posted to our server
                 populated = true;
@@ -273,16 +292,90 @@ namespace BackgroundLieferandoApiAsyncRequests
         // TODO: UpdateStatus in general -> post status update and update row color call
         // use with currently selected row
         //
-        private bool UpdateStatus(int currRowIdx, int status, string deliveryTime)
+        private bool UpdateStatus_OnClick(int currRowIdx, int status, TimeSpan deliveryTime)
         {
-            bool success = true; // post successfully send
-            // TODO: switch status
+            // updates status in data table
             GlobalDataTable.Rows[currRowIdx].SetField("Status", status);
-            // TODO: call PostUpdateStatus from ConsumeAPIs.cs, pass whats needed for json id key status ...
-            // overload methods? or dict?
+            // Sets new requestedDeliveryTime in DataTable if status is 1.
+            if(status == 1)
+            {
+                var startTime = Convert.ToDateTime(GlobalDataTable.Rows[currRowIdx].Field<string>("Start"));
+                var endTime = startTime.Add(deliveryTime);
+                GlobalDataTable.Rows[currRowIdx].SetField("Ende", endTime.ToString("HH:mm:ss"));
+                GlobalDataTable.Rows[currRowIdx].SetField("EndDateTime", endTime.ToString("s") + endTime.ToString("zzz"));
+            }
+            
+            var success = PostStatusUpdate(buildStatusUpdateObj(currRowIdx, status)); // testing
+
+            UpdateDataGridViewSource(GlobalDataTable);
+
             UpdateStatusColors();
-            if(success) UpdateButtonsEnableState(status);
+
+            // for testing, since takeaway sandbox is currently not avaiable,
+            // so post update status won't work
+            success = true;
+            if (success) 
+                UpdateButtonsEnableState(status);
+            //else
+                //TODO: messagebox?
+
+
             return success;
+
+            // TODO: or error handling after call in new method with context to current action?
+        }
+
+        //f.e.
+        // {
+        //      "id": "cae66b7e-791b-11e7-b4d8-3464a91febf3",
+        //      "key": "D41D8CD98F00B204E9800998ECF8427E",
+        //      "status": "confirmed_change_delivery_time",
+        //      "changedDeliveryTime": "2020-02-04T19:45:00+02:00"
+        // }
+        private LieferandoStatusUpdates buildStatusUpdateObj(int currRowIdx, int status)
+        {
+            LieferandoStatusUpdates newStatusUpdate = new LieferandoStatusUpdates(); // empty json
+            var currRowData = GlobalDataTable.Rows[currRowIdx]; // need unknown data in grid
+            switch (status)
+            {
+                // Status 0: The order was printed by a restaurant. (printed)
+                case 0:
+                    newStatusUpdate.id = currRowData.Field<string>("Id");
+                    newStatusUpdate.key = currRowData.Field<string>("Key");
+                    newStatusUpdate.status = "printed";
+                    
+                    break;
+                // Status 1: The order was confirmed with a change in delivery time. (confirmed_change_delivery_time)
+                case 1:
+                    newStatusUpdate.id = currRowData.Field<string>("Id");
+                    newStatusUpdate.key = currRowData.Field<string>("Key");
+                    newStatusUpdate.status = "confirmed_change_delivery_time";
+                    newStatusUpdate.changedDeliveryTime = currRowData.Field<string>("EndDateTime");
+                    break;
+                // Status 2: The restaurant started preparing the order. (kitchen)
+                case 2:
+                    newStatusUpdate.id = currRowData.Field<string>("Id");
+                    newStatusUpdate.key = currRowData.Field<string>("Key");
+                    newStatusUpdate.status = "kitchen";
+                    break;
+                // Status 3: The order is in delivery by a courier. (in_delivery)
+                case 3:
+                    newStatusUpdate.id = currRowData.Field<string>("Id");
+                    newStatusUpdate.key = currRowData.Field<string>("Key");
+                    newStatusUpdate.status = "in_delivery";
+                    break;
+                // Status 4: The order has been delivered by a courier. (delivered)
+                case 4:
+                    newStatusUpdate.id = currRowData.Field<string>("Id");
+                    newStatusUpdate.key = currRowData.Field<string>("Key");
+                    newStatusUpdate.status = "delivered";
+                    break;
+
+                default:
+                    break;
+            }
+
+            return newStatusUpdate;
         }
 
         // Highlights the rows in specific color according to the changes in status send to Lieferando.
@@ -379,14 +472,22 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
         }
 
-        // Function to convert various string representations of dates and times to DateTime values
-        // and returns it in format "HH:mm:ss" if time set to true(default false). 
-        private string ConvertToOwnDateTime(string value, bool time = false)
+
+        // TODO handle "ASAP" as other input value
+        // Function to convert various string representations of dates and times to DateTime values.
+        // Returns it in format "HH:mm:ss" if timeflag set to "timeonly"
+        // or in format something like yyyy-MM-ddTHH:mm:sszzz if timeflag set to "lieferando"(default ""). 
+        private string ConvertToOwnDateTime(string value, string timeflag="")
         {
             try
             {
-                return time ? Convert.ToDateTime(value).ToString("HH:mm:ss") :
-                    Convert.ToDateTime(value).ToString("dd/MM/yyyy HH:mm:ss");
+                if (timeflag == "timeonly")
+                    return Convert.ToDateTime(value).ToString("HH:mm:ss");
+                else if(timeflag == "lieferando")
+                    // "yyyy'-'MM'-'dd'T'HH':'mm':'ss'zzz" - not working
+                    return Convert.ToDateTime(value).ToString("s") + Convert.ToDateTime(value).ToString("zzz");
+                else
+                    return Convert.ToDateTime(value).ToString("dd/MM/yyyy HH:mm:ss");
             }
             catch (FormatException)
             {
@@ -398,7 +499,8 @@ namespace BackgroundLieferandoApiAsyncRequests
         // TODO maybe: no status encoding
         private int InitializeStatus(string reqDeliveryTime)
         {
-            // Post Update Status when 1
+            // TODO: Post update status
+            // Post Update Status 0 and 1 when 1 initially
             return reqDeliveryTime == string.Empty ? 0 : 1; // 0 "Neu eingegangen" : 1 "Lieferzeit mitgeteilt";
         }
 
@@ -408,8 +510,11 @@ namespace BackgroundLieferandoApiAsyncRequests
         }
 
         //
+        // Discussion idea:
+        // Checkbox Automatische Statusänderung aktivieren
         // TODO: Automatische Statusänderung nach Schema
-        // -> TODO: Schema überlegen. (f.e. Lieferzeit 30, nach 10 min Lieferung starten)
+        // -> TODO: Schema überlegen.
+        // (f.e. Lieferzeit 30, nach 3min Zubereitung starten, nach 10 min Lieferung starten)
         //
     }
 }

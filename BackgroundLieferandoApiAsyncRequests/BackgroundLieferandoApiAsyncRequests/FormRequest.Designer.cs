@@ -111,7 +111,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.resultLabel);
             this.panel1.Controls.Add(this.btnStart);
-            this.panel1.Location = new System.Drawing.Point(21, 313);
+            this.panel1.Location = new System.Drawing.Point(15, 326);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(383, 107);
             this.panel1.TabIndex = 10;
@@ -309,7 +309,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ClientSize = new System.Drawing.Size(848, 432);
+            this.ClientSize = new System.Drawing.Size(848, 447);
             this.Controls.Add(this.buttonLieferungAbschließen);
             this.Controls.Add(this.buttonLieferungStart);
             this.Controls.Add(this.buttonZubereitungStart);

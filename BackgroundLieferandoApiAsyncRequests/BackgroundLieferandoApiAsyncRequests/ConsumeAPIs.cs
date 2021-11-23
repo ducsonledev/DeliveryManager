@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Net;
 using System.Text;
 
 namespace BackgroundLieferandoApiAsyncRequests
@@ -185,8 +186,17 @@ namespace BackgroundLieferandoApiAsyncRequests
         //    public string List<Order> Orders { get; set; }
         //}
 
+        // TOOD: JSON Model for status updates
+        public class LieferandoStatusUpdates
+        {
+            public string id { get; set; }
+            public string status { get; set; }
+            public string key { get; set; }
+            public string changedDeliveryTime { get; set; }
+            public string text { get; set; }
+        }
 
-        public static LieferandoOrders LieferandoRequest (string restaurantId, string apikey, string username, string password) // later parameter int restaurantId
+        public static LieferandoOrders LieferandoRequest(string restaurantId, string apikey, string username, string password) // later parameter int restaurantId
         {
             var byteArray = Encoding.ASCII.GetBytes(username + ":" + password); // "test-username-123:test-password-123" only for sandbox api
             var clientGet = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/" + restaurantId); // test id 1234567// TODO later: Replace with https://posapi.takeaway.com/1.0/orders/<RestaurantId>
@@ -198,7 +208,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
             //IRestResponse responseGet = clientGet.Execute(requestGetOrd); // Currently ERROR STATUS CODE 530 // uncomment for re-testing
             //if (responseGet.StatusCode != HttpStatusCode.OK) return null; // TODO case: change if response content can be null not empty {}
-            
+
             string json;
             // Sorry for hardcoded path, it's just for testing purposes for now, since https://sandbox-pull-posapi.takeaway.com as of now is currently not available.
             // I contacted Lieferando-Support regarding that problem, I hope, they resolve that soon.
@@ -207,9 +217,9 @@ namespace BackgroundLieferandoApiAsyncRequests
             {
                 json = r.ReadToEnd();
             }
-            
+
             var newLieferandoOrders = JsonConvert.DeserializeObject<LieferandoOrders>(json); // json // responseGet.Content // Currently ERROR STATUS CODE 530
-            
+
             return newLieferandoOrders;
         }
 
@@ -231,17 +241,19 @@ namespace BackgroundLieferandoApiAsyncRequests
             return responsePost;
         }
 
-        // TODO: send status update to https://posapi.takeaway.com/1.0/status with correct json format
-        // f.e.
-        // {
-        //      "id": "cae66b7e-791b-11e7-b4d8-3464a91febf3",
-        //      "key": "D41D8CD98F00B204E9800998ECF8427E",
-        //      "status": "confirmed_change_delivery_time",
-        //      "changedDeliveryTime": "2020-02-04T19:45:00+02:00"
-        // }
-        public static bool PostStatusUpdate()
-            {
-                return true;
-            }
+        // Post status updates to Lieferando.
+        public static bool PostStatusUpdate(LieferandoStatusUpdates newStatusUpdate)
+        {
+            var clientPost = new RestClient("https://posapi.takeaway.com/1.0/status");
+            var requestPostOrd = new RestRequest(Method.POST);
+            IRestResponse responsePost = null;
+            // TODO: filter, change parameter in function to single order that is checked if new
+            // sending orders seperately for now
+            
+            responsePost = clientPost.Execute(
+                requestPostOrd.AddJsonBody(JsonConvert.SerializeObject(newStatusUpdate, Formatting.Indented)));
+
+            return responsePost.StatusCode == HttpStatusCode.OK;
         }
+    }
 }
