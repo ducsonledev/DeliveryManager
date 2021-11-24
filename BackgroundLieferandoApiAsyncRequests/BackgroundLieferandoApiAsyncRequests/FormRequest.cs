@@ -48,7 +48,6 @@ namespace BackgroundLieferandoApiAsyncRequests
                 }
                 // TODO: call only if new orders
                 PopulateDataGridViewOrders(LieferandoOrders);
-                //UpdateStatusColors();
                 // TODO: post only if new
                 PostOwnOrders(LieferandoOrders);
                 Thread.Sleep(Properties.Settings.Default.OrdersInterval);
@@ -108,6 +107,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             backgroundWorker.RunWorkerAsync();
             // for changing enable state of buttons to send status of orders
             DataGridViewFormRequest.SelectionChanged += DataGridViewFormRequest_SelectionChanged;
+            //DataGridViewFormRequest.Columns["Id"].Visible = false;
             // event handling for closing this form
             Closing += FormRequest_Closing;
             resultLabel.Text = "Requesting orders from Lieferando!"; // for testing
@@ -118,7 +118,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             MessageBox.Show("Closing form!");
             
             GlobalDataTable.WriteXml(GlobalDataTable.TableName + ".xml");
-            GlobalDataTable.ReadXml(GlobalDataTable.TableName + ".xml");
+            //GlobalDataTable.ReadXml(GlobalDataTable.TableName + ".xml");
         }
 
         private void button15min_Click(object sender, EventArgs e)
@@ -194,7 +194,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO maybe better: no status encoding
             GlobalDataTable.Columns.Add("Kasse", typeof(string));
             GlobalDataTable.Columns.Add("Datum", typeof(string));
-            // hidden information for FormDetails
+            // information for FormDetails
             GlobalDataTable.Columns.Add("PLZ", typeof(string));
             GlobalDataTable.Columns.Add("Zusatz", typeof(string));
             GlobalDataTable.Columns.Add("Lieferung", typeof(string));
@@ -207,22 +207,6 @@ namespace BackgroundLieferandoApiAsyncRequests
             // for json of status updates
             GlobalDataTable.Columns.Add("Key", typeof(string));
             GlobalDataTable.Columns.Add("EndDateTime", typeof(string));
-
-            // hide columns for clearer UI, only show necessary headers to the user
-            GlobalDataTable.Columns[0].ColumnMapping = MappingType.Hidden;
-            // hidden information for FormDetails
-            GlobalDataTable.Columns[11].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[12].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[13].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[14].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[15].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[16].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[17].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[18].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[19].ColumnMapping = MappingType.Hidden;
-            // hide info for json of status updates
-            GlobalDataTable.Columns[20].ColumnMapping = MappingType.Hidden;
-            GlobalDataTable.Columns[21].ColumnMapping = MappingType.Hidden;
         }
 
         private bool PopulateDataGridViewOrders(LieferandoOrders lieferandoOrders)
@@ -246,7 +230,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                     order.customer.city,
                     order.customer.phoneNumber,
                     order.totalPrice.ToString("0.00"),
-                    InitializeStatus(reqDeliverytime),
+                    InitializedStatus(reqDeliverytime),
                     Properties.Settings.Default.Kasse,
                     order.orderDate.ToString("dd/MM/yyyy"),
                     order.customer.postalCode,
@@ -265,6 +249,8 @@ namespace BackgroundLieferandoApiAsyncRequests
                 populated = true;
             }
             UpdateDataGridViewSource(GlobalDataTable);
+            // TODO: Post update status 
+            // Post Update Status 0 and 1 when 1 initially
             UpdateStatusColors();
             return populated;
         }
@@ -283,6 +269,20 @@ namespace BackgroundLieferandoApiAsyncRequests
             {
                 // we are on the UI thread. We are free to touch things.
                 DataGridViewFormRequest.DataSource = data;
+                // Hide columns for clear UI. 
+                // (No need to hide "Produkte" or "Rabattgutscheine",
+                // because DatGridView doesn't show object instances
+                // and don'T create headers for them.)
+                DataGridViewFormRequest.Columns["Id"].Visible = false;
+                DataGridViewFormRequest.Columns["PLZ"].Visible = false;
+                DataGridViewFormRequest.Columns["Zusatz"].Visible = false;
+                DataGridViewFormRequest.Columns["Lieferung"].Visible = false;
+                DataGridViewFormRequest.Columns["Lieferkosten"].Visible = false;
+                DataGridViewFormRequest.Columns["Rabatt"].Visible = false;
+                DataGridViewFormRequest.Columns["Info"].Visible = false;
+                DataGridViewFormRequest.Columns["Bezahlt"].Visible = false;
+                DataGridViewFormRequest.Columns["Key"].Visible = false;
+                DataGridViewFormRequest.Columns["EndDateTime"].Visible = false;
                 // Resize the DataGridView columns to fit the newly loaded data.
                 DataGridViewFormRequest.AutoResizeColumns();
             }
@@ -496,11 +496,9 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
         }
 
-        // TODO maybe: no status encoding
-        private int InitializeStatus(string reqDeliveryTime)
+        // Initializes the status of the order.
+        private int InitializedStatus(string reqDeliveryTime)
         {
-            // TODO: Post update status
-            // Post Update Status 0 and 1 when 1 initially
             return reqDeliveryTime == string.Empty ? 0 : 1; // 0 "Neu eingegangen" : 1 "Lieferzeit mitgeteilt";
         }
 
