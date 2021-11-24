@@ -142,6 +142,8 @@ namespace BackgroundLieferandoApiAsyncRequests
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            this.DataGridViewFormRequest.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DataGridViewFormRequest.ShowEditingIcon = false;
             this.DataGridViewFormRequest.Size = new System.Drawing.Size(848, 195);
             this.DataGridViewFormRequest.TabIndex = 11;
             // 

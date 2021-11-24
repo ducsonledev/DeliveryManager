@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
+using System.Diagnostics; // for testing performance
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
@@ -123,46 +124,54 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void button15min_Click(object sender, EventArgs e)
         {
-            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 15, 0));
+            UpdateStatus_OnClick(DataGridViewFormRequest.SelectedRows[0].Index, 1, new TimeSpan(0, 15, 0));
         }
 
         private void button20min_Click(object sender, EventArgs e)
         {
-            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 20, 0));
+            UpdateStatus_OnClick(DataGridViewFormRequest.SelectedRows[0].Index, 1, new TimeSpan(0, 20, 0));
         }
 
         private void button30min_Click(object sender, EventArgs e)
         {
-            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 30, 0));
+            UpdateStatus_OnClick(DataGridViewFormRequest.SelectedRows[0].Index, 1, new TimeSpan(0, 30, 0));
         }
 
         private void button45min_Click(object sender, EventArgs e)
         {
-            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 45, 0));
+            UpdateStatus_OnClick(DataGridViewFormRequest.SelectedRows[0].Index, 1, new TimeSpan(0, 45, 0));
         }
 
         private void button60min_Click(object sender, EventArgs e)
         {
-            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(1, 0, 0));
+            UpdateStatus_OnClick(DataGridViewFormRequest.SelectedRows[0].Index, 1, new TimeSpan(1, 0, 0));
         }
 
         private void buttonZubereitungStart_Click(object sender, EventArgs e)
         {
-            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 2, TimeSpan.Zero);
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
+            UpdateStatus_OnClick(DataGridViewFormRequest.SelectedRows[0].Index, 2, TimeSpan.Zero);
+
+            sw.Stop();
+
+            Console.WriteLine("Zubereitung starten - Elapsed={0}", sw.Elapsed);
         }
 
         private void buttonLieferungStart_Click(object sender, EventArgs e)
         {
-            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 3, TimeSpan.Zero);
+            UpdateStatus_OnClick(DataGridViewFormRequest.SelectedRows[0].Index, 3, TimeSpan.Zero);
         }
         private void buttonLieferungAbschließen_Click(object sender, EventArgs e)
         {
-            UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 4, TimeSpan.Zero);
+            UpdateStatus_OnClick(DataGridViewFormRequest.SelectedRows[0].Index, 4, TimeSpan.Zero);
         }
 
         private void buttonDetails_Click(object sender, EventArgs e)
         {
-            var formDetails = new FormDetails(GlobalDataTable, DataGridViewFormRequest.CurrentCell.RowIndex);
+            var formDetails = new FormDetails(GlobalDataTable, DataGridViewFormRequest.SelectedRows[0].Index);
             formDetails.ShowDialog();
         }
 
@@ -259,6 +268,11 @@ namespace BackgroundLieferandoApiAsyncRequests
         // Layout: https://stackoverflow.com/questions/52992223/c-sharp-update-datagridview-from-backgroundworker
         public void UpdateDataGridViewSource(object data)
         {
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
+
             // check if we need to swap thread context
             if (DataGridViewFormRequest.InvokeRequired)
             {
@@ -285,7 +299,13 @@ namespace BackgroundLieferandoApiAsyncRequests
                 DataGridViewFormRequest.Columns["EndDateTime"].Visible = false;
                 // Resize the DataGridView columns to fit the newly loaded data.
                 DataGridViewFormRequest.AutoResizeColumns();
+                //DataGridViewFormRequest.CurrentRow.Selected = true;
             }
+
+
+            sw.Stop();
+
+            Console.WriteLine("Update DataGridView Elapsed={0}", sw.Elapsed);
         }
 
         //
@@ -304,12 +324,19 @@ namespace BackgroundLieferandoApiAsyncRequests
                 GlobalDataTable.Rows[currRowIdx].SetField("Ende", endTime.ToString("HH:mm:ss"));
                 GlobalDataTable.Rows[currRowIdx].SetField("EndDateTime", endTime.ToString("s") + endTime.ToString("zzz"));
             }
+            UpdateDataGridViewSource(GlobalDataTable);
+            UpdateStatusColors();
             
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
             var success = PostStatusUpdate(buildStatusUpdateObj(currRowIdx, status)); // testing
 
-            UpdateDataGridViewSource(GlobalDataTable);
+            sw.Stop();
 
-            UpdateStatusColors();
+            Console.WriteLine("PostStatusUpdate Elapsed={0}", sw.Elapsed);
+
 
             // for testing, since takeaway sandbox is currently not avaiable,
             // so post update status won't work
@@ -334,6 +361,10 @@ namespace BackgroundLieferandoApiAsyncRequests
         // }
         private LieferandoStatusUpdates buildStatusUpdateObj(int currRowIdx, int status)
         {
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
             LieferandoStatusUpdates newStatusUpdate = new LieferandoStatusUpdates(); // empty json
             var currRowData = GlobalDataTable.Rows[currRowIdx]; // need unknown data in grid
             switch (status)
@@ -375,6 +406,9 @@ namespace BackgroundLieferandoApiAsyncRequests
                     break;
             }
 
+            sw.Stop();
+
+            Console.WriteLine("buildStatusUpdateObj Elapsed={0}", sw.Elapsed);
             return newStatusUpdate;
         }
 
@@ -382,6 +416,11 @@ namespace BackgroundLieferandoApiAsyncRequests
         // Documentation: https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.datagridview.selectionchanged?redirectedfrom=MSDN&view=windowsdesktop-6.0
         private void UpdateStatusColors()
         {
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
+            
             int status;
             // Iterate through the rows.
             for (int i = 0; i < DataGridViewFormRequest.Rows.Count; i++)
@@ -421,6 +460,10 @@ namespace BackgroundLieferandoApiAsyncRequests
                 // To make sure color on selection is black.
                 DataGridViewFormRequest.Rows[i].DefaultCellStyle.SelectionForeColor = Color.Black;
             }
+
+            sw.Stop();
+
+            Console.WriteLine("UpdateColorStatus Elapsed={0}", sw.Elapsed);
         }
 
         private void UpdateButtonsEnableState(int status)
