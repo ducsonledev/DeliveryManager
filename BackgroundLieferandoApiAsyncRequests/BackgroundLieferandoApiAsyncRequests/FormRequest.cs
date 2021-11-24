@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows.Forms;
 using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
 using System.Diagnostics; // for testing performance
+using Newtonsoft.Json;
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
@@ -22,8 +23,9 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            //BackgroundWorker worker = sender as BackgroundWorker;
+            // Initialie DataTable and DataGridView
             InitializeGlobalDataTable();
+            PopulateDataGridViewOrders(JsonConvert.DeserializeObject<LieferandoOrders>("{}"));
             while (true)
             {
                 if (backgroundWorker.CancellationPending == true)
@@ -42,15 +44,19 @@ namespace BackgroundLieferandoApiAsyncRequests
                 if (LieferandoOrders == null)
                 {
                     MessageBox.Show(
-                        "Leider ist ein Fehler aufgetreten! Bitte überprüfen Sie nochmal Ihre Einstellungen und starten Sie den Vorgang erneut."
+                        "Leider ist ein Fehler aufgetreten! Bitte überprüfen Sie nochmal Ihre Einstellungen (Settings) und starten Sie den Vorgang erneut."
                         );
                     e.Cancel = true;
                     return;
                 }
-                // TODO: call only if new orders
-                PopulateDataGridViewOrders(LieferandoOrders);
-                // TODO: post only if new
-                PostOwnOrders(LieferandoOrders);
+
+                // only for new incoming orders we populate data and post to our server 
+                if(LieferandoOrders.orders.Count != 0)
+                {
+                    PopulateDataGridViewOrders(LieferandoOrders);
+                    PostOwnOrders(LieferandoOrders);
+                }
+
                 Thread.Sleep(Properties.Settings.Default.OrdersInterval);
             }
         }
@@ -297,6 +303,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 DataGridViewFormRequest.Columns["Bezahlt"].Visible = false;
                 DataGridViewFormRequest.Columns["Key"].Visible = false;
                 DataGridViewFormRequest.Columns["EndDateTime"].Visible = false;
+                // TODO: initial current cell selected, also for new incoming orders the selection is off
                 // Resize the DataGridView columns to fit the newly loaded data.
                 DataGridViewFormRequest.AutoResizeColumns();
                 //DataGridViewFormRequest.CurrentRow.Selected = true;
@@ -308,10 +315,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             Console.WriteLine("Update DataGridView Elapsed={0}", sw.Elapsed);
         }
 
-        //
-        // TODO: UpdateStatus in general -> post status update and update row color call
-        // use with currently selected row
-        //
+        // Updates the status when the user makes an action that triggers it.
         private bool UpdateStatus_OnClick(int currRowIdx, int status, TimeSpan deliveryTime)
         {
             // updates status in data table
@@ -342,6 +346,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             // so post update status won't work
             success = true;
             if (success) 
+                // what if status updates at the moment are not possible,
+                // UI should still be working as usual for user?
+                // then it must be internet that has to be checked
+                // or server down, which means no orders possible
                 UpdateButtonsEnableState(status);
             //else
                 //TODO: messagebox?
