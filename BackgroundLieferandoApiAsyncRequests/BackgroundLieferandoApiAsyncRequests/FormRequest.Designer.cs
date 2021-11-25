@@ -123,6 +123,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.DataGridViewFormRequest.AllowUserToResizeColumns = false;
             this.DataGridViewFormRequest.AllowUserToResizeRows = false;
             this.DataGridViewFormRequest.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.DataGridViewFormRequest.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCellsExceptHeaders;
             this.DataGridViewFormRequest.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.DataGridViewFormRequest.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.DataGridViewFormRequest.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
@@ -142,10 +143,13 @@ namespace BackgroundLieferandoApiAsyncRequests
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
-            this.DataGridViewFormRequest.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.DataGridViewFormRequest.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+            this.DataGridViewFormRequest.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.DataGridViewFormRequest.ShowEditingIcon = false;
+            this.DataGridViewFormRequest.ShowRowErrors = false;
             this.DataGridViewFormRequest.Size = new System.Drawing.Size(848, 195);
             this.DataGridViewFormRequest.TabIndex = 11;
+            this.DataGridViewFormRequest.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridViewFormRequest_CellClick);
             // 
             // labelTimeNow
             // 
