@@ -17,15 +17,20 @@ namespace BackgroundLieferandoApiAsyncRequests
         public FormRequest()
         {
             InitializeComponent();
-            backgroundWorker.WorkerReportsProgress = true; // TODO: false?
-            backgroundWorker.WorkerSupportsCancellation = true; // TODO: false?
+            backgroundWorker.WorkerReportsProgress = true; // TODO: false? delete line?
+            backgroundWorker.WorkerSupportsCancellation = true; // TODO: false? delete line?
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            // Initialie DataTable and DataGridView
+            // Initialize DataTable and DataGridView
             InitializeGlobalDataTable();
-            PopulateDataGridViewOrders(JsonConvert.DeserializeObject<LieferandoOrders>("{}"));
+            InitializeDataGridView();
+            // TODO optimization: error, init in Populate Method has no selections at the start
+            // this way, initial current cell selected is off
+            //PopulateDataGridViewOrders(JsonConvert.DeserializeObject<LieferandoOrders>("{}"));
+            if (DataGridViewFormRequest.Rows.Count != 0)
+                DataGridViewFormRequest.Rows[0].Cells[0].Selected = true;
             while (true)
             {
                 if (backgroundWorker.CancellationPending == true)
@@ -114,7 +119,6 @@ namespace BackgroundLieferandoApiAsyncRequests
             backgroundWorker.RunWorkerAsync();
             // for changing enable state of buttons to send status of orders
             DataGridViewFormRequest.SelectionChanged += DataGridViewFormRequest_SelectionChanged;
-            //DataGridViewFormRequest.Columns["Id"].Visible = false;
             // event handling for closing this form
             Closing += FormRequest_Closing;
             resultLabel.Text = "Requesting orders from Lieferando!"; // for testing
@@ -187,8 +191,8 @@ namespace BackgroundLieferandoApiAsyncRequests
             if (DataGridViewFormRequest == null)
                 return;
 
-            // To manage to ability to only send certain status orders based on current status of the selected row.
-            int status = int.Parse(DataGridViewFormRequest.Rows[DataGridViewFormRequest.CurrentCell.RowIndex].Cells["Status"].Value.ToString());
+            // To manage to ability to only send certain status orders based on current status of the selected row..CurrentCell.RowIndex
+            int status = int.Parse(DataGridViewFormRequest.Rows[DataGridViewFormRequest.SelectedRows[0].Index].Cells["Status"].Value.ToString());
             UpdateButtonsEnableState(status);
         }
 
@@ -196,8 +200,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             // creating DataTable for our DataGridView
             GlobalDataTable = new DataTable("TodaysOrders" + DateTime.Now.ToString("s").Replace(":","Z"));
-            // identify orders
-            GlobalDataTable.Columns.Add("Id", typeof(string));
+            
             // DataGridView headers
             GlobalDataTable.Columns.Add("Start", typeof(string));
             GlobalDataTable.Columns.Add("Ende", typeof(string));
@@ -222,22 +225,22 @@ namespace BackgroundLieferandoApiAsyncRequests
             // for json of status updates
             GlobalDataTable.Columns.Add("Key", typeof(string));
             GlobalDataTable.Columns.Add("EndDateTime", typeof(string));
+            // identify orders
+            GlobalDataTable.Columns.Add("Id", typeof(string));
         }
 
-        private bool PopulateDataGridViewOrders(LieferandoOrders lieferandoOrders)
+        private void PopulateDataGridViewOrders(LieferandoOrders lieferandoOrders)
         {
-            bool populated = false;
             foreach (var order in lieferandoOrders.orders)
             {
                 var selectedRows = GlobalDataTable.Select("Id = '" + order.id + "'");
                 if (selectedRows.Length != 0)
                     continue;
-
                 // code reached, only orders that are new to the data table will be added
                 var reqDeliverytime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), "timeonly");
                 var reqDeliveryLieferandoTime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), "lieferando");
+                int statusEncode = InitializedStatus(reqDeliverytime);
                 GlobalDataTable.Rows.Add(
-                    order.id,
                     order.orderDate.ToString("HH:mm:ss"),
                     reqDeliverytime, // TODO later: adding automatic delivery time
                     order.customer.name,
@@ -245,7 +248,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                     order.customer.city,
                     order.customer.phoneNumber,
                     order.totalPrice.ToString("0.00"),
-                    InitializedStatus(reqDeliverytime),
+                    statusEncode,
                     Properties.Settings.Default.Kasse,
                     order.orderDate.ToString("dd/MM/yyyy"),
                     order.customer.postalCode,
@@ -258,16 +261,20 @@ namespace BackgroundLieferandoApiAsyncRequests
                     order.products,
                     order.discounts,
                     order.orderKey,
-                    reqDeliveryLieferandoTime
+                    reqDeliveryLieferandoTime,
+                    order.id
                 );
-                // TODO: but not filtering specific orders that should be posted to our server
-                populated = true;
+                // Post update status for initial incoming orders
+                var success = PostStatusUpdate(buildStatusUpdateObj(GlobalDataTable.Rows.Count - 1, statusEncode));
+                // for incoming orders that already has requested delivery time, the status 0 and 1 will be send
+                if(statusEncode==1)
+                   success = PostStatusUpdate(buildStatusUpdateObj(GlobalDataTable.Rows.Count - 1, statusEncode-1));
+                // TODO: success == false error handling??
+                // recall automatically until it works?
+                // message: check your internet connection in the meantime?
             }
             UpdateDataGridViewSource(GlobalDataTable);
-            // TODO: Post update status 
-            // Post Update Status 0 and 1 when 1 initially
             UpdateStatusColors();
-            return populated;
         }
 
         // create a method to handle updating the datasource
@@ -289,10 +296,16 @@ namespace BackgroundLieferandoApiAsyncRequests
             {
                 // we are on the UI thread. We are free to touch things.
                 DataGridViewFormRequest.DataSource = data;
-                // Hide columns for clear UI. 
+
+                // data table was null
+                if (DataGridViewFormRequest == null)
+                    return;
+
                 // (No need to hide "Produkte" or "Rabattgutscheine",
                 // because DatGridView doesn't show object instances
                 // and don'T create headers for them.)
+
+                // Hide columns for clear UI. 
                 DataGridViewFormRequest.Columns["Id"].Visible = false;
                 DataGridViewFormRequest.Columns["PLZ"].Visible = false;
                 DataGridViewFormRequest.Columns["Zusatz"].Visible = false;
@@ -306,13 +319,45 @@ namespace BackgroundLieferandoApiAsyncRequests
                 // TODO: initial current cell selected, also for new incoming orders the selection is off
                 // Resize the DataGridView columns to fit the newly loaded data.
                 DataGridViewFormRequest.AutoResizeColumns();
-                //DataGridViewFormRequest.CurrentRow.Selected = true;
             }
 
 
             sw.Stop();
 
             Console.WriteLine("Update DataGridView Elapsed={0}", sw.Elapsed);
+        }
+
+        public void InitializeDataGridView()
+        {
+            // check if we need to swap thread context
+            if (DataGridViewFormRequest.InvokeRequired)
+            {
+                // we aren't on the UI thread. Ask the UI thread to do stuff.
+                DataGridViewFormRequest.Invoke(new Action(() => InitializeDataGridView()));
+            }
+            else
+            {
+                // we are on the UI thread. We are free to touch things.
+                DataGridViewFormRequest.DataSource = JsonConvert.DeserializeObject<LieferandoOrders>("{}");
+                // Hide columns for clear UI. 
+                // (No need to hide "Produkte" or "Rabattgutscheine",
+                // because DatGridView doesn't show object instances
+                // and don'T create headers for them.)
+                // TODO optimization: null reference error to Columns
+                //DataGridViewFormRequest.Columns["Id"].Visible = false;
+                //DataGridViewFormRequest.Columns["PLZ"].Visible = false;
+                //DataGridViewFormRequest.Columns["Zusatz"].Visible = false;
+                //DataGridViewFormRequest.Columns["Lieferung"].Visible = false;
+                //DataGridViewFormRequest.Columns["Lieferkosten"].Visible = false;
+                //DataGridViewFormRequest.Columns["Rabatt"].Visible = false;
+                //DataGridViewFormRequest.Columns["Info"].Visible = false;
+                //DataGridViewFormRequest.Columns["Bezahlt"].Visible = false;
+                //DataGridViewFormRequest.Columns["Key"].Visible = false;
+                //DataGridViewFormRequest.Columns["EndDateTime"].Visible = false;
+
+                // Resize the DataGridView columns to fit the newly loaded data.
+                //DataGridViewFormRequest.AutoResizeColumns();
+            }
         }
 
         // Updates the status when the user makes an action that triggers it.
@@ -352,7 +397,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                 // or server down, which means no orders possible
                 UpdateButtonsEnableState(status);
             //else
-                //TODO: messagebox?
+                //TODO: messagebox, error handling??
 
 
             return success;
