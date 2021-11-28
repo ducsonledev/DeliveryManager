@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -7,13 +6,13 @@ using System.Threading;
 using System.Windows.Forms;
 using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
 using System.Diagnostics; // for testing performance
-using Newtonsoft.Json;
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
     public partial class FormRequest : Form
     {
         public DataTable GlobalDataTable { get; set; }
+        public DataTable GlobalFinishedOrdersDataTable { get; set; }
         public FormRequest()
         {
             InitializeComponent();
@@ -23,14 +22,10 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            // Initialize DataTable and DataGridView
+            // Initialize DataTable.
             InitializeGlobalDataTable();
-            //InitializeDataGridView();
-            // TODO optimization: error, init in Populate Method has no selections at the start
-            // this way, initial current cell selected is off
-            //PopulateDataGridViewOrders(JsonConvert.DeserializeObject<LieferandoOrders>("{}"));
-            if (DataGridViewFormRequest.Rows.Count != 0)
-                DataGridViewFormRequest.Rows[0].Cells[0].Selected = true;
+            // TODO optimization: Initialize datagridview with columns?
+
             while (true)
             {
                 if (backgroundWorker.CancellationPending == true)
@@ -44,7 +39,7 @@ namespace BackgroundLieferandoApiAsyncRequests
                     Properties.Settings.Default.ApiKey,
                     Properties.Settings.Default.Username,
                     Properties.Settings.Default.Password
-                    ); // credentials for testing sandboxapi
+                );
 
                 if (LieferandoOrders == null)
                 {
@@ -95,6 +90,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             btnCancel.Enabled = false;
         }
 
+        // TODO later: clean up.
         private void btnStart_Click(object sender, EventArgs e)
         {
             backgroundWorker.RunWorkerAsync();
@@ -117,9 +113,6 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void FormRequest_Load(object sender, EventArgs e)
         {
             backgroundWorker.RunWorkerAsync();
-            // for changing enable state of buttons to send status of orders
-            //DataGridViewFormRequest.SelectionChanged += DataGridViewFormRequest_SelectionChanged;
-            //DataGridViewFormRequest.ColumnSortModeChanged += DataGridViewFormRequest_ColumnSortModeChanged;
             // event handling for closing this form
             Closing += FormRequest_Closing;
             resultLabel.Text = "Requesting orders from Lieferando!"; // for testing
@@ -130,31 +123,51 @@ namespace BackgroundLieferandoApiAsyncRequests
             MessageBox.Show("Closing form!");
 
             GlobalDataTable.WriteXml(GlobalDataTable.TableName + ".xml");
-            //GlobalDataTable.ReadXml(GlobalDataTable.TableName + ".xml");
+            GlobalFinishedOrdersDataTable.WriteXml(GlobalFinishedOrdersDataTable.TableName + ".xml");
         }
 
         private void button15min_Click(object sender, EventArgs e)
         {
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
+
             UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 15, 0));
         }
 
         private void button20min_Click(object sender, EventArgs e)
         {
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
+
             UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 20, 0));
         }
 
         private void button30min_Click(object sender, EventArgs e)
         {
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
+
             UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 30, 0));
         }
 
         private void button45min_Click(object sender, EventArgs e)
         {
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
+
             UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(0, 45, 0));
         }
 
         private void button60min_Click(object sender, EventArgs e)
         {
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
+
             UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 1, new TimeSpan(1, 0, 0));
         }
 
@@ -163,6 +176,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
+
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
 
             UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 2, TimeSpan.Zero);
 
@@ -173,26 +190,38 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         private void buttonLieferungStart_Click(object sender, EventArgs e)
         {
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
+
             UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 3, TimeSpan.Zero);
         }
         private void buttonLieferungAbschließen_Click(object sender, EventArgs e)
         {
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
+
             UpdateStatus_OnClick(DataGridViewFormRequest.CurrentCell.RowIndex, 4, TimeSpan.Zero);
         }
 
         private void buttonDetails_Click(object sender, EventArgs e)
         {
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
+                return;
+
             var formDetails = new FormDetails(GlobalDataTable, DataGridViewFormRequest.CurrentCell.RowIndex);
             formDetails.ShowDialog();
         }
 
         private void DataGridViewFormRequest_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Zero state handling
-            if (DataGridViewFormRequest == null)
+            // Handling Zero state.
+            if (DataGridViewFormRequest.Rows.Count == 0)
                 return;
 
-            // handle click on comlumn headers
+            // Handle click on comlumn headers.
             if (DataGridViewFormRequest.CurrentCell == null)
                 return;
 
@@ -202,37 +231,40 @@ namespace BackgroundLieferandoApiAsyncRequests
             UpdateButtonsEnableState(status);
         }
 
+        // Initialize both DataTables for open orders and finished orders.
         private void InitializeGlobalDataTable()
         {
-            // creating DataTable for our DataGridView
-            GlobalDataTable = new DataTable("TodaysOrders" + DateTime.Now.ToString("s").Replace(":", "Z"));
-
-            // DataGridView headers
-            GlobalDataTable.Columns.Add("Start", typeof(string));
-            GlobalDataTable.Columns.Add("Ende", typeof(string));
-            GlobalDataTable.Columns.Add("Name", typeof(string));
-            GlobalDataTable.Columns.Add("Straße", typeof(string));
-            GlobalDataTable.Columns.Add("Ort", typeof(string));
-            GlobalDataTable.Columns.Add("Telefon", typeof(string));
-            GlobalDataTable.Columns.Add("Summe", typeof(string));
-            GlobalDataTable.Columns.Add("Status", typeof(int)); // TODO maybe better: no status encoding
-            GlobalDataTable.Columns.Add("Kasse", typeof(string));
-            GlobalDataTable.Columns.Add("Datum", typeof(string));
-            // information for FormDetails
-            GlobalDataTable.Columns.Add("PLZ", typeof(string));
-            GlobalDataTable.Columns.Add("Zusatz", typeof(string));
-            GlobalDataTable.Columns.Add("Lieferung", typeof(string));
-            GlobalDataTable.Columns.Add("Lieferkosten", typeof(string));
-            GlobalDataTable.Columns.Add("Rabatt", typeof(string));
-            GlobalDataTable.Columns.Add("Info", typeof(string));
-            GlobalDataTable.Columns.Add("Bezahlt", typeof(string));
-            GlobalDataTable.Columns.Add("Produkte", typeof(List<Product>));
-            GlobalDataTable.Columns.Add("Rabattgutscheine", typeof(List<Discount>));
-            // for json of status updates
-            GlobalDataTable.Columns.Add("Key", typeof(string));
-            GlobalDataTable.Columns.Add("EndDateTime", typeof(string));
-            // identify orders
-            GlobalDataTable.Columns.Add("Id", typeof(string));
+            // Creating and initializing DataTables.
+            GlobalDataTable = new DataTable() {
+                Columns = { 
+                    { "Start", typeof(string) }, 
+                    { "Ende", typeof(string) },
+                    { "Name", typeof(string) },
+                    { "Straße", typeof(string) },
+                    { "Ort", typeof(string) },
+                    { "Telefon", typeof(string) },
+                    { "Summe", typeof(string) },
+                    { "Status", typeof(int) },
+                    { "Kasse", typeof(string) },
+                    { "Datum", typeof(string) },
+                    { "PLZ", typeof(string) },
+                    { "Zusatz", typeof(string) },
+                    { "Lieferung", typeof(string) },
+                    { "Lieferkosten", typeof(string) },
+                    { "Rabatt", typeof(string) },
+                    { "Info", typeof(string) },
+                    { "Bezahlt", typeof(string) },
+                    { "Produkte", typeof(string) },  // TODO: Generic List content not shown. (Solution: ToString() before printing/saving)
+                    { "Rabattgutscheine", typeof(string) },  // TODO: Generic List content not shown. (Solution: ToString() before printing/saving)
+                    { "Key", typeof(string) },
+                    { "EndDateTime", typeof(string) },
+                    { "Id", typeof(string) }
+                }
+            };
+            GlobalFinishedOrdersDataTable = GlobalDataTable.Clone();
+            // Setting DataTable names.
+            GlobalDataTable.TableName = "TodaysOpenOrders" + DateTime.Now.ToString("s").Replace(":", "-");
+            GlobalFinishedOrdersDataTable.TableName = "TodaysFinishedOrders" + DateTime.Now.ToString("s").Replace(":", "-");
         }
 
         private void PopulateDataGridViewOrders(LieferandoOrders lieferandoOrders)
@@ -287,21 +319,24 @@ namespace BackgroundLieferandoApiAsyncRequests
         // Layout: https://stackoverflow.com/questions/52992223/c-sharp-update-datagridview-from-backgroundworker
         public void UpdateDataGridViewSource(object data)
         {
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
+            
 
             // check if we need to swap thread context
             if (DataGridViewFormRequest.InvokeRequired)
             {
-                Console.WriteLine("Call1 UpdateDataSource");
                 // we aren't on the UI thread. Ask the UI thread to do stuff.
                 DataGridViewFormRequest.Invoke(new Action(() => UpdateDataGridViewSource(data)));
             }
             else
             {
-                Console.WriteLine("Call2 UpdateDataSource");
-                // we are on the UI thread. We are free to touch things.
+                Stopwatch sw = new Stopwatch();
+
+                sw.Start();
+
+                // Adjust orders by seperating finished orders from open orders.
+                AdjustDataTable();
+
+                // We are on the UI thread. We are free to touch things in DataGridView.
                 DataGridViewFormRequest.DataSource = data;
 
                 // Data table is empty, then no need for more settings.
@@ -316,21 +351,33 @@ namespace BackgroundLieferandoApiAsyncRequests
 
                 sw2.Stop();
                 Console.WriteLine("AdjustDataGridView Elapsed={0}", sw2.Elapsed);
+
+                sw.Stop();
+
+                Console.WriteLine("Update DataGridView data Elapsed={0}", sw.Elapsed);
             }
 
-            sw.Stop();
+            
+        }
 
-            Console.WriteLine("Update DataGridView Elapsed={0}", sw.Elapsed);
+        // Adjust orders by seperating finished orders from open orders.
+        public void AdjustDataTable()
+        {
+            for (int i = 0; i < GlobalDataTable.Rows.Count; i++)
+            {
+                var dr = GlobalDataTable.Rows[i];
+                if (dr.Field<int>("Status") == 4)
+                {
+                    GlobalFinishedOrdersDataTable.ImportRow(dr);
+                    GlobalDataTable.Rows.Remove(dr);
+                }
+            }
         }
 
         // Adjust visibility, sorting or widths of columns and rows in DataGridView.
         private void AdjustDataGridView()
         {
-            // Hide columns for clear UI. 
-            // (issue cleared: Hiding Columns "Produkte" or "Rabattgutscheine",
-            // is not necessary because somehow DatGridView doesn't show object
-            // instances and don't create headers for them. (raising NullPointerEx.))
-            DataGridViewFormRequest.Columns["Id"].Visible = false;
+            // Hide columns for clear UI.
             DataGridViewFormRequest.Columns["PLZ"].Visible = false;
             DataGridViewFormRequest.Columns["Zusatz"].Visible = false;
             DataGridViewFormRequest.Columns["Lieferung"].Visible = false;
@@ -338,8 +385,11 @@ namespace BackgroundLieferandoApiAsyncRequests
             DataGridViewFormRequest.Columns["Rabatt"].Visible = false;
             DataGridViewFormRequest.Columns["Info"].Visible = false;
             DataGridViewFormRequest.Columns["Bezahlt"].Visible = false;
+            DataGridViewFormRequest.Columns["Produkte"].Visible = false;
+            DataGridViewFormRequest.Columns["Rabattgutscheine"].Visible = false; 
             DataGridViewFormRequest.Columns["Key"].Visible = false;
             DataGridViewFormRequest.Columns["EndDateTime"].Visible = false;
+            DataGridViewFormRequest.Columns["Id"].Visible = false;
 
             // Sets enable state of button senders.
             UpdateButtonsEnableState(GlobalDataTable.Rows[DataGridViewFormRequest.CurrentCell.RowIndex].Field<int>("Status"));
@@ -348,14 +398,6 @@ namespace BackgroundLieferandoApiAsyncRequests
             foreach (DataGridViewColumn dgvc in DataGridViewFormRequest.Columns)
             {
                 dgvc.SortMode = DataGridViewColumnSortMode.NotSortable;
-            }
-
-            // Hide rows with status 4, finished delivery.
-            for (int i = 0; i < DataGridViewFormRequest.Rows.Count; i++)
-            {
-                int status = int.Parse(DataGridViewFormRequest.Rows[i].Cells["Status"].Value.ToString());
-                if (status == 4 && DataGridViewFormRequest.CurrentCell.RowIndex != i)
-                    DataGridViewFormRequest.Rows[i].Visible = false;
             }
 
             // Resize the DataGridView columns to fit the newly loaded data.
@@ -571,7 +613,8 @@ namespace BackgroundLieferandoApiAsyncRequests
         }
 
 
-        // TODO handle "ASAP" as other input value
+        // TODO optimization: handle "ASAP" as other input value, (already handled in general with this approach)
+        //
         // Function to convert various string representations of dates and times to DateTime values.
         // Returns it in format "HH:mm:ss" if timeflag set to "timeonly"
         // or in format something like yyyy-MM-ddTHH:mm:sszzz if timeflag set to "lieferando"(default ""). 
