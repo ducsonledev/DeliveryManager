@@ -6,6 +6,7 @@ using System.Threading;
 using System.Windows.Forms;
 using static BackgroundLieferandoApiAsyncRequests.ConsumeAPIs;
 using System.Diagnostics; // for testing performance
+using System.Collections.Generic;
 
 namespace BackgroundLieferandoApiAsyncRequests
 {
@@ -254,8 +255,8 @@ namespace BackgroundLieferandoApiAsyncRequests
                     { "Rabatt", typeof(string) },
                     { "Info", typeof(string) },
                     { "Bezahlt", typeof(string) },
-                    { "Produkte", typeof(string) },  // TODO: Generic List content not shown. (Solution: ToString() before printing/saving)
-                    { "Rabattgutscheine", typeof(string) },  // TODO: Generic List content not shown. (Solution: ToString() before printing/saving)
+                    { "Produkte", typeof(List<Product>) },  // TODO: Generic List content not shown. (Solution: ToString() before printing/saving)
+                    { "Rabattgutscheine", typeof(List<Discount>) },  // TODO: Generic List content not shown. (Solution: ToString() before printing/saving)
                     { "Key", typeof(string) },
                     { "EndDateTime", typeof(string) },
                     { "Id", typeof(string) }
@@ -382,8 +383,8 @@ namespace BackgroundLieferandoApiAsyncRequests
             DataGridViewFormRequest.Columns["Rabatt"].Visible = false;
             DataGridViewFormRequest.Columns["Info"].Visible = false;
             DataGridViewFormRequest.Columns["Bezahlt"].Visible = false;
-            DataGridViewFormRequest.Columns["Produkte"].Visible = false;
-            DataGridViewFormRequest.Columns["Rabattgutscheine"].Visible = false; 
+            //DataGridViewFormRequest.Columns["Produkte"].Visible = false; // obj. instance Error, not initialized in DataGridView
+            //DataGridViewFormRequest.Columns["Rabattgutscheine"].Visible = false; // obj. instance Error, not initialized in DataGridView
             DataGridViewFormRequest.Columns["Key"].Visible = false;
             DataGridViewFormRequest.Columns["EndDateTime"].Visible = false;
             DataGridViewFormRequest.Columns["Id"].Visible = false;
