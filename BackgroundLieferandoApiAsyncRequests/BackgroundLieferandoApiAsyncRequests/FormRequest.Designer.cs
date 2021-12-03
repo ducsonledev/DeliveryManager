@@ -30,7 +30,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.btnStart = new System.Windows.Forms.Button();
             this.resultLabel = new System.Windows.Forms.Label();
@@ -135,14 +135,14 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.DataGridViewFormRequest.Name = "DataGridViewFormRequest";
             this.DataGridViewFormRequest.ReadOnly = true;
             this.DataGridViewFormRequest.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.DataGridViewFormRequest.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.DataGridViewFormRequest.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.DataGridViewFormRequest.ShowEditingIcon = false;
@@ -272,12 +272,14 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             this.buttonZubereitungStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.buttonZubereitungStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonZubereitungStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonZubereitungStart.Location = new System.Drawing.Point(434, 17);
             this.buttonZubereitungStart.Name = "buttonZubereitungStart";
             this.buttonZubereitungStart.Size = new System.Drawing.Size(135, 68);
             this.buttonZubereitungStart.TabIndex = 26;
             this.buttonZubereitungStart.Text = "Zubereitung starten";
             this.buttonZubereitungStart.UseVisualStyleBackColor = false;
+            this.buttonZubereitungStart.EnabledChanged += new System.EventHandler(this.buttonZubereitungStart_EnabledChanged);
             this.buttonZubereitungStart.Click += new System.EventHandler(this.buttonZubereitungStart_Click);
             // 
             // buttonLieferungStart

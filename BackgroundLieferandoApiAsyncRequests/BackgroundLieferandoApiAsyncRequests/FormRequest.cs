@@ -11,7 +11,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 {
     public partial class FormRequest : Form
     {
-        public DataTable GlobalDataTable { get; set; }
+        public DataTable GlobalOpenOrdersDataTable { get; set; }
         public DataTable GlobalFinishedOrdersDataTable { get; set; }
         public FormRequest()
         {
@@ -122,7 +122,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             MessageBox.Show("Closing form!");
 
-            GlobalDataTable.WriteXml(GlobalDataTable.TableName + ".xml");
+            GlobalOpenOrdersDataTable.WriteXml(GlobalOpenOrdersDataTable.TableName + ".xml");
             GlobalFinishedOrdersDataTable.WriteXml(GlobalFinishedOrdersDataTable.TableName + ".xml");
         }
 
@@ -211,7 +211,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             if (DataGridViewFormRequest.Rows.Count == 0)
                 return;
 
-            var formDetails = new FormDetails(GlobalDataTable, DataGridViewFormRequest.CurrentCell.RowIndex);
+            var formDetails = new FormDetails(GlobalOpenOrdersDataTable, DataGridViewFormRequest.CurrentCell.RowIndex);
             formDetails.ShowDialog();
         }
 
@@ -235,7 +235,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void InitializeGlobalDataTable()
         {
             // Creating and initializing DataTables.
-            GlobalDataTable = new DataTable() {
+            GlobalOpenOrdersDataTable = new DataTable() {
                 Columns = { 
                     { "Start", typeof(string) }, 
                     { "Ende", typeof(string) },
@@ -261,9 +261,9 @@ namespace BackgroundLieferandoApiAsyncRequests
                     { "Id", typeof(string) }
                 }
             };
-            GlobalFinishedOrdersDataTable = GlobalDataTable.Clone();
+            GlobalFinishedOrdersDataTable = GlobalOpenOrdersDataTable.Clone();
             // Setting DataTable names.
-            GlobalDataTable.TableName = "TodaysOpenOrders" + DateTime.Now.ToString("s").Replace(":", "-");
+            GlobalOpenOrdersDataTable.TableName = "TodaysOpenOrders" + DateTime.Now.ToString("s").Replace(":", "-");
             GlobalFinishedOrdersDataTable.TableName = "TodaysFinishedOrders" + DateTime.Now.ToString("s").Replace(":", "-");
         }
 
@@ -271,14 +271,14 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             foreach (var order in lieferandoOrders.orders)
             {
-                var selectedRows = GlobalDataTable.Select("Id = '" + order.id + "'");
+                var selectedRows = GlobalOpenOrdersDataTable.Select("Id = '" + order.id + "'");
                 if (selectedRows.Length != 0)
                     continue;
                 // code reached, only orders that are new to the data table will be added
                 var reqDeliverytime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), "timeonly");
                 var reqDeliveryLieferandoTime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), "lieferando");
                 int statusEncode = InitializeEncodedStatus(reqDeliverytime);
-                GlobalDataTable.Rows.Add(
+                GlobalOpenOrdersDataTable.Rows.Add(
                     order.orderDate.ToString("HH:mm:ss"),
                     reqDeliverytime, // TODO later: adding automatic delivery time
                     order.customer.name,
@@ -303,15 +303,15 @@ namespace BackgroundLieferandoApiAsyncRequests
                     order.id
                 );
                 // Post update status for initial incoming orders
-                var success = PostStatusUpdate(buildStatusUpdateObj(GlobalDataTable.Rows.Count - 1, statusEncode));
+                var success = PostStatusUpdate(buildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode));
                 // for incoming orders that already has requested delivery time, the status 0 and 1 will be send
                 if (statusEncode == 1)
-                    success = PostStatusUpdate(buildStatusUpdateObj(GlobalDataTable.Rows.Count - 1, statusEncode - 1));
+                    success = PostStatusUpdate(buildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode - 1));
                 // TODO: success == false error handling??
                 // recall automatically until it works?
                 // message: check your internet connection in the meantime?
             }
-            UpdateDataGridViewSource(GlobalDataTable);
+            UpdateDataGridViewSource(GlobalOpenOrdersDataTable);
             UpdateStatusColors();
         }
 
@@ -319,8 +319,6 @@ namespace BackgroundLieferandoApiAsyncRequests
         // Layout: https://stackoverflow.com/questions/52992223/c-sharp-update-datagridview-from-backgroundworker
         public void UpdateDataGridViewSource(object data)
         {
-            
-
             // check if we need to swap thread context
             if (DataGridViewFormRequest.InvokeRequired)
             {
@@ -363,13 +361,13 @@ namespace BackgroundLieferandoApiAsyncRequests
         // Adjust orders by seperating finished orders from open orders.
         public void AdjustDataTable()
         {
-            for (int i = 0; i < GlobalDataTable.Rows.Count; i++)
+            for (int i = 0; i < GlobalOpenOrdersDataTable.Rows.Count; i++)
             {
-                var dr = GlobalDataTable.Rows[i];
-                if (dr.Field<int>("Status") == 4)
+                var dr = GlobalOpenOrdersDataTable.Rows[i];
+                if (dr.Field<int>("Status") == 4 && DataGridViewFormRequest.CurrentCell.RowIndex != i)
                 {
                     GlobalFinishedOrdersDataTable.ImportRow(dr);
-                    GlobalDataTable.Rows.Remove(dr);
+                    GlobalOpenOrdersDataTable.Rows.Remove(dr);
                 }
             }
         }
@@ -392,7 +390,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             DataGridViewFormRequest.Columns["Id"].Visible = false;
 
             // Sets enable state of button senders.
-            UpdateButtonsEnableState(GlobalDataTable.Rows[DataGridViewFormRequest.CurrentCell.RowIndex].Field<int>("Status"));
+            UpdateButtonsEnableState(GlobalOpenOrdersDataTable.Rows[DataGridViewFormRequest.CurrentCell.RowIndex].Field<int>("Status"));
 
             // Disable sorting, to keep right status colors every time.
             foreach (DataGridViewColumn dgvc in DataGridViewFormRequest.Columns)
@@ -408,23 +406,24 @@ namespace BackgroundLieferandoApiAsyncRequests
         private bool UpdateStatus_OnClick(int currRowIdx, int status, TimeSpan deliveryTime)
         {
             // updates status in data table
-            GlobalDataTable.Rows[currRowIdx].SetField("Status", status);
+            GlobalOpenOrdersDataTable.Rows[currRowIdx].SetField("Status", status);
             // Sets new requestedDeliveryTime in DataTable if status is 1.
             if (status == 1)
             {
-                var startTime = Convert.ToDateTime(GlobalDataTable.Rows[currRowIdx].Field<string>("Start"));
+                var startTime = Convert.ToDateTime(GlobalOpenOrdersDataTable.Rows[currRowIdx].Field<string>("Start"));
                 var endTime = startTime.Add(deliveryTime);
-                GlobalDataTable.Rows[currRowIdx].SetField("Ende", endTime.ToString("HH:mm:ss"));
-                GlobalDataTable.Rows[currRowIdx].SetField("EndDateTime", endTime.ToString("s") + endTime.ToString("zzz"));
+                GlobalOpenOrdersDataTable.Rows[currRowIdx].SetField("Ende", endTime.ToString("HH:mm:ss"));
+                GlobalOpenOrdersDataTable.Rows[currRowIdx].SetField("EndDateTime", endTime.ToString("s") + endTime.ToString("zzz"));
             }
-            UpdateDataGridViewSource(GlobalDataTable);
+            UpdateDataGridViewSource(GlobalOpenOrdersDataTable);
             UpdateStatusColors();
-
+            // TODO error: currRowIdx changes after updating rows with status 4
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
 
-            var success = PostStatusUpdate(buildStatusUpdateObj(currRowIdx, status)); // testing
+            // TODO bug: post before deleting row, or return row to post with deletion
+            var success = PostStatusUpdate(buildStatusUpdateObj(DataGridViewFormRequest.CurrentCell.RowIndex, status)); // testing 
 
             sw.Stop();
 
@@ -463,7 +462,8 @@ namespace BackgroundLieferandoApiAsyncRequests
             sw.Start();
 
             LieferandoStatusUpdates newStatusUpdate = new LieferandoStatusUpdates(); // empty json
-            var currRowData = GlobalDataTable.Rows[currRowIdx]; // need unknown data in grid
+            //TODO issue System.IndexOutOfRangeException: 'An der Position 2 befindet sich keine Zeile.'
+            var currRowData = GlobalOpenOrdersDataTable.Rows[currRowIdx]; // need unknown data in grid
             switch (status)
             {
                 // Status 0: The order was printed by a restaurant. (printed)
@@ -471,7 +471,6 @@ namespace BackgroundLieferandoApiAsyncRequests
                     newStatusUpdate.id = currRowData.Field<string>("Id");
                     newStatusUpdate.key = currRowData.Field<string>("Key");
                     newStatusUpdate.status = "printed";
-
                     break;
                 // Status 1: The order was confirmed with a change in delivery time. (confirmed_change_delivery_time)
                 case 1:
@@ -613,7 +612,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         }
 
 
-        // TODO optimization: handle "ASAP" as other input value, (already handled in general with this approach)
+        // TODO optimization maybe: handle "ASAP" as other input value, (already handled in general with this approach)
         //
         // Function to convert various string representations of dates and times to DateTime values.
         // Returns it in format "HH:mm:ss" if timeflag set to "timeonly"
@@ -646,6 +645,11 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void timer_Tick(object sender, EventArgs e)
         {
             labelTimeNow.Text = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
+        }
+
+        private void buttonZubereitungStart_EnabledChanged(object sender, EventArgs e)
+        {
+            buttonZubereitungStart.ForeColor = buttonZubereitungStart.Enabled == false ? Color.Gray : Color.Black;
         }
 
         //
