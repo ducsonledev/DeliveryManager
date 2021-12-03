@@ -355,7 +355,6 @@ namespace BackgroundLieferandoApiAsyncRequests
                 Console.WriteLine("Update DataGridView data Elapsed={0}", sw.Elapsed);
             }
 
-            
         }
 
         // Adjust orders by seperating finished orders from open orders.
@@ -417,12 +416,12 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
             UpdateDataGridViewSource(GlobalOpenOrdersDataTable);
             UpdateStatusColors();
-            // TODO error: currRowIdx changes after updating rows with status 4
+            
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
 
-            // TODO bug: post before deleting row, or return row to post with deletion
+            // Issue (solved) careful: currRowIdx changes after updating rows with status 4 (Solution: new currentcell rowindex)
             var success = PostStatusUpdate(buildStatusUpdateObj(DataGridViewFormRequest.CurrentCell.RowIndex, status)); // testing 
 
             sw.Stop();
@@ -611,8 +610,9 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
         }
 
-
-        // TODO optimization maybe: handle "ASAP" as other input value, (already handled in general with this approach)
+        //
+        // TODO optimization maybe: handle "ASAP" as other input value,
+        // (SOLVED, already handled in general with this approach, but maybe not the cleanest)
         //
         // Function to convert various string representations of dates and times to DateTime values.
         // Returns it in format "HH:mm:ss" if timeflag set to "timeonly"
@@ -647,9 +647,46 @@ namespace BackgroundLieferandoApiAsyncRequests
             labelTimeNow.Text = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
         }
 
+        // Solution to customize disabling color of buttons
+        // Layout: https://stackoverflow.com/questions/18717090/how-to-avoid-color-changes-when-button-is-disabled
         private void buttonZubereitungStart_EnabledChanged(object sender, EventArgs e)
         {
             buttonZubereitungStart.ForeColor = buttonZubereitungStart.Enabled == false ? Color.Gray : Color.Black;
+        }
+
+        private void buttonLieferungStart_EnabledChanged(object sender, EventArgs e)
+        {
+            buttonLieferungStart.ForeColor = buttonLieferungStart.Enabled == false ? Color.Gray : Color.Black;
+        }
+
+        private void buttonZubereitungStart_Paint(object sender, PaintEventArgs e)
+        {
+            dynamic btn = (Button)sender;
+            dynamic drawBrush = new SolidBrush(btn.ForeColor);
+            dynamic sf = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+            buttonZubereitungStart.Text = string.Empty;
+            e.Graphics.DrawString("Zubereitung starten", btn.Font, drawBrush, e.ClipRectangle, sf);
+            drawBrush.Dispose();
+            sf.Dispose();
+        }
+
+        private void buttonLieferungStart_Paint(object sender, PaintEventArgs e)
+        {
+            dynamic btn = (Button)sender;
+            dynamic drawBrush = new SolidBrush(btn.ForeColor);
+            dynamic sf = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Center
+            };
+            buttonLieferungStart.Text = string.Empty;
+            e.Graphics.DrawString("Lieferung starten", btn.Font, drawBrush, e.ClipRectangle, sf);
+            drawBrush.Dispose();
+            sf.Dispose();
         }
 
         //

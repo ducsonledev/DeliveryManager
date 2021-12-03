@@ -30,7 +30,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.btnStart = new System.Windows.Forms.Button();
             this.resultLabel = new System.Windows.Forms.Label();
@@ -135,14 +135,14 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.DataGridViewFormRequest.Name = "DataGridViewFormRequest";
             this.DataGridViewFormRequest.ReadOnly = true;
             this.DataGridViewFormRequest.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.DataGridViewFormRequest.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.DataGridViewFormRequest.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.DataGridViewFormRequest.ShowEditingIcon = false;
@@ -261,6 +261,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             // checkBoxLieferzeit
             // 
             this.checkBoxLieferzeit.AutoSize = true;
+            this.checkBoxLieferzeit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.checkBoxLieferzeit.Location = new System.Drawing.Point(133, 89);
             this.checkBoxLieferzeit.Name = "checkBoxLieferzeit";
             this.checkBoxLieferzeit.Size = new System.Drawing.Size(305, 17);
@@ -281,6 +282,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonZubereitungStart.UseVisualStyleBackColor = false;
             this.buttonZubereitungStart.EnabledChanged += new System.EventHandler(this.buttonZubereitungStart_EnabledChanged);
             this.buttonZubereitungStart.Click += new System.EventHandler(this.buttonZubereitungStart_Click);
+            this.buttonZubereitungStart.Paint += new System.Windows.Forms.PaintEventHandler(this.buttonZubereitungStart_Paint);
             // 
             // buttonLieferungStart
             // 
@@ -292,7 +294,9 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.buttonLieferungStart.TabIndex = 27;
             this.buttonLieferungStart.Text = "Lieferung starten";
             this.buttonLieferungStart.UseVisualStyleBackColor = false;
+            this.buttonLieferungStart.EnabledChanged += new System.EventHandler(this.buttonLieferungStart_EnabledChanged);
             this.buttonLieferungStart.Click += new System.EventHandler(this.buttonLieferungStart_Click);
+            this.buttonLieferungStart.Paint += new System.Windows.Forms.PaintEventHandler(this.buttonLieferungStart_Paint);
             // 
             // buttonLieferungAbschließen
             // 
