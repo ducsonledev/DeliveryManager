@@ -122,7 +122,8 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void FormRequest_Closing(object sender, CancelEventArgs e)
         {
             MessageBox.Show("Closing form!");
-
+            // TODO: last order, if status 4, move to Finished Orders DataTable
+            AdjustDataTable(closing:true);
             GlobalOpenOrdersDataTable.WriteXml(GlobalOpenOrdersDataTable.TableName + ".xml");
             GlobalFinishedOrdersDataTable.WriteXml(GlobalFinishedOrdersDataTable.TableName + ".xml");
         }
@@ -236,9 +237,10 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void InitializeGlobalDataTable()
         {
             // Creating and initializing DataTables.
-            GlobalOpenOrdersDataTable = new DataTable() {
-                Columns = { 
-                    { "Start", typeof(string) }, 
+            GlobalOpenOrdersDataTable = new DataTable()
+            {
+                Columns = {
+                    { "Start", typeof(string) },
                     { "Ende", typeof(string) },
                     { "Name", typeof(string) },
                     { "Straße", typeof(string) },
@@ -255,8 +257,8 @@ namespace BackgroundLieferandoApiAsyncRequests
                     { "Rabatt", typeof(string) },
                     { "Info", typeof(string) },
                     { "Bezahlt", typeof(string) },
-                    { "Produkte", typeof(List<Product>) },  // TODO: Generic List content not shown. (Solution: ToString() before printing/saving)
-                    { "Rabattgutscheine", typeof(List<Discount>) },  // TODO: Generic List content not shown. (Solution: ToString() before printing/saving)
+                    { "Produkte", typeof(List<Product>) },
+                    { "Rabattgutscheine", typeof(List<Discount>) },
                     { "Key", typeof(string) },
                     { "EndDateTime", typeof(string) },
                     { "Id", typeof(string) }
@@ -359,12 +361,12 @@ namespace BackgroundLieferandoApiAsyncRequests
         }
 
         // Adjust orders by seperating finished orders from open orders.
-        public void AdjustDataTable()
+        public void AdjustDataTable(bool closing = false)
         {
             for (int i = 0; i < GlobalOpenOrdersDataTable.Rows.Count; i++)
             {
                 var dr = GlobalOpenOrdersDataTable.Rows[i];
-                if (dr.Field<int>("Status") == 4 && DataGridViewFormRequest.CurrentCell.RowIndex != i)
+                if (dr.Field<int>("Status") == 4 && (DataGridViewFormRequest.CurrentCell.RowIndex != i || closing))
                 {
                     GlobalFinishedOrdersDataTable.ImportRow(dr);
                     GlobalOpenOrdersDataTable.Rows.Remove(dr);
@@ -417,13 +419,13 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
             UpdateDataGridViewSource(GlobalOpenOrdersDataTable);
             UpdateStatusColors();
-            
+
             Stopwatch sw = new Stopwatch();
 
             sw.Start();
 
             // Issue (solved) careful: currRowIdx changes after updating rows with status 4 (Solution: new currentcell rowindex)
-            var success = PostStatusUpdate(buildStatusUpdateObj(DataGridViewFormRequest.CurrentCell.RowIndex, status)); // testing 
+            var success = PostStatusUpdate(buildStatusUpdateObj(DataGridViewFormRequest.CurrentCell.RowIndex, status));
 
             sw.Stop();
 
@@ -648,7 +650,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             labelTimeNow.Text = DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss");
         }
 
-        // Solution to customize disabling color of buttons
+        // Customize disabling color of buttons.
         // Layout: https://stackoverflow.com/questions/18717090/how-to-avoid-color-changes-when-button-is-disabled
         private void buttonZubereitungStart_EnabledChanged(object sender, EventArgs e)
         {
