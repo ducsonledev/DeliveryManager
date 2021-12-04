@@ -11,6 +11,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 {
     public class ConsumeAPIs
     {
+        // example, if properties need to be accessed directly
         //public class Order
         //{
         //    [JsonProperty("id")]
@@ -180,13 +181,14 @@ namespace BackgroundLieferandoApiAsyncRequests
             public List<Order> orders { get; set; }
         }
 
+        // example, if properties need to be accessed directly
         //public class OrdersList
         //{
         //    [JsonProperty("orders")]
         //    public string List<Order> Orders { get; set; }
         //}
 
-        // TOOD: JSON Model for status updates
+        // JSON Model for status updates
         public class LieferandoStatusUpdates
         {
             public string id { get; set; }
@@ -224,21 +226,22 @@ namespace BackgroundLieferandoApiAsyncRequests
         }
 
         // Post OwnOrders to our server api
-        public static IRestResponse PostOwnOrders(LieferandoOrders LieferandoOrders)
+        public static bool PostOwnOrders(LieferandoOrders LieferandoOrders)
         {
             //var clientPost = new RestClient("<server-base-adresse>:13000"); 
             var clientPost = new RestClient("https://sandbox-pull-posapi.takeaway.com/1.0/orders/1234567"); // temp test adress // TODO later: Please add server adresse with Port 13000.
             var requestPostOrd = new RestRequest(Method.POST);
             IRestResponse responsePost = null;
-            // TODO: filter, change parameter in function to single order that is checked if new
-            // sending orders seperately for now
+
+            // sending orders seperately (should be, for each order we have one seperate receipt)
             var ownOrders = LieferandoOrders.ToOwnOrder();
             foreach (var ownOrder in ownOrders)
             {
                 var newOwnOrder = JsonConvert.SerializeObject(ownOrder, Formatting.Indented);
                 responsePost = clientPost.Execute(requestPostOrd.AddJsonBody(newOwnOrder));
             }
-            return responsePost;
+
+            return responsePost.StatusCode == HttpStatusCode.OK;
         }
 
         // Post status updates to Lieferando.
@@ -246,11 +249,8 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             var clientPost = new RestClient("https://posapi.takeaway.com/1.0/status");
             var requestPostOrd = new RestRequest(Method.POST);
-            IRestResponse responsePost = null;
-            // TODO: filter, change parameter in function to single order that is checked if new
-            // sending orders seperately for now
-            
-            responsePost = clientPost.Execute(
+
+            IRestResponse responsePost = clientPost.Execute(
                 requestPostOrd.AddJsonBody(JsonConvert.SerializeObject(newStatusUpdate, Formatting.Indented)));
 
             return responsePost.StatusCode == HttpStatusCode.OK;

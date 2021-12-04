@@ -25,7 +25,6 @@ namespace BackgroundLieferandoApiAsyncRequests
         {
             // Initialize DataTable.
             InitializeGlobalDataTable();
-            // TODO optimization: Initialize datagridview with columns?
 
             while (true)
             {
@@ -51,17 +50,24 @@ namespace BackgroundLieferandoApiAsyncRequests
                     return;
                 }
 
-                // only for new incoming orders we populate data and post to our server 
+                // only for at least one new incoming orders we populate data and post to our server 
                 if (LieferandoOrders.orders.Count != 0)
                 {
-                    PopulateDataGridViewOrders(LieferandoOrders);
-                    PostOwnOrders(LieferandoOrders);
+                    var success = PostOwnOrders(LieferandoOrders);
+
+                    success = true; // for testing, since we still don't send to our server adresse, but the set up is there
+
+                    // only populate in DataTable and DataGridView if we can create a receipt by posting to our server
+                    if (success)
+                        PopulateDataGridViewOrders(LieferandoOrders); // handles the new orders only itself by comparing with DataTable
                 }
 
                 Thread.Sleep(Properties.Settings.Default.OrdersInterval);
             }
         }
 
+
+        // TODO: saving DataTables when canceling and open last orders in open orders xml when not older than 1 Day/12hours
         private void backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             // still for testing, should be changed when it works, but probably never reached?
@@ -122,7 +128,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void FormRequest_Closing(object sender, CancelEventArgs e)
         {
             MessageBox.Show("Closing form!");
-            // TODO: last order, if status 4, move to Finished Orders DataTable
+            // moving all finished orders to the according datatable even when selected (f.e. last order left is finished)
             AdjustDataTable(closing:true);
             GlobalOpenOrdersDataTable.WriteXml(GlobalOpenOrdersDataTable.TableName + ".xml");
             GlobalFinishedOrdersDataTable.WriteXml(GlobalFinishedOrdersDataTable.TableName + ".xml");
@@ -277,10 +283,17 @@ namespace BackgroundLieferandoApiAsyncRequests
                 var selectedRows = GlobalOpenOrdersDataTable.Select("Id = '" + order.id + "'");
                 if (selectedRows.Length != 0)
                     continue;
-                // code reached, only orders that are new to the data table will be added
+
+                // in the following, code reached, only orders that are new to the data table will be added and posted to our server
+
+                // collecting and sending orders
                 var reqDeliverytime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), "timeonly");
                 var reqDeliveryLieferandoTime = ConvertToOwnDateTime(order.requestedDeliveryTime.ToString(), "lieferando");
                 int statusEncode = InitializeEncodedStatus(reqDeliverytime);
+
+                // in the following, code reached, only when we posted the new orders to our server for the receipt (printed)
+
+                // adding new orders to open orders data table
                 GlobalOpenOrdersDataTable.Rows.Add(
                     order.orderDate.ToString("HH:mm:ss"),
                     reqDeliverytime, // TODO later: adding automatic delivery time
@@ -305,14 +318,14 @@ namespace BackgroundLieferandoApiAsyncRequests
                     reqDeliveryLieferandoTime,
                     order.id
                 );
-                // Post update status for initial incoming orders
-                var success = PostStatusUpdate(buildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode));
+                bool success;
                 // for incoming orders that already has requested delivery time, the status 0 and 1 will be send
                 if (statusEncode == 1)
                     success = PostStatusUpdate(buildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode - 1));
-                // TODO: success == false error handling??
-                // recall automatically until it works?
-                // message: check your internet connection in the meantime?
+                // Post update status for initial incoming orders
+                success = PostStatusUpdate(buildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode));
+                // if not successful, doesn't matter, then we don't send status and keep order in DataTable.
+                // this is just for convenience for real time customer feedback and doesn't actually hinder the full delivery till the door
             }
             UpdateDataGridViewSource(GlobalOpenOrdersDataTable);
             UpdateStatusColors();
@@ -385,8 +398,8 @@ namespace BackgroundLieferandoApiAsyncRequests
             DataGridViewFormRequest.Columns["Rabatt"].Visible = false;
             DataGridViewFormRequest.Columns["Info"].Visible = false;
             DataGridViewFormRequest.Columns["Bezahlt"].Visible = false;
-            //DataGridViewFormRequest.Columns["Produkte"].Visible = false; // obj. instance Error, not initialized in DataGridView
-            //DataGridViewFormRequest.Columns["Rabattgutscheine"].Visible = false; // obj. instance Error, not initialized in DataGridView
+            //DataGridViewFormRequest.Columns["Produkte"].Visible = false; // obj. instance not initialized in DataGridView anyway
+            //DataGridViewFormRequest.Columns["Rabattgutscheine"].Visible = false; // obj. instance not initialized in DataGridView anyway
             DataGridViewFormRequest.Columns["Key"].Visible = false;
             DataGridViewFormRequest.Columns["EndDateTime"].Visible = false;
             DataGridViewFormRequest.Columns["Id"].Visible = false;
@@ -407,6 +420,29 @@ namespace BackgroundLieferandoApiAsyncRequests
         // Updates the status when the user makes an action that triggers it.
         private bool UpdateStatus_OnClick(int currRowIdx, int status, TimeSpan deliveryTime)
         {
+            Stopwatch sw = new Stopwatch();
+
+            sw.Start();
+
+            // called with the new current row because the Data Table could have been adjusted in the mean time TODO but status is wrong for current cell
+            bool success = PostStatusUpdate(buildStatusUpdateObj(DataGridViewFormRequest.CurrentCell.RowIndex, status));
+
+            sw.Stop();
+
+            Console.WriteLine("PostStatusUpdate Elapsed={0}", sw.Elapsed);
+
+            // for testing purposes, since takeaway sandbox is currently not avaiable,
+            // so post update status won't work
+            success = true; // for testing
+
+            // If no status is send, the GlobalOpenOrdersDataTable should keep the order, otherwise, the same order will be requested from Lieferando Server
+            // and we would have the same order multiple times. Since Lieferando only removes orders that have a successfully changed status or if that order
+            // is older than 12 hours.
+            if (!success)
+                return false;
+
+            // in the following, code reached, successfully send status update to Lieferando API
+
             // updates status in data table
             GlobalOpenOrdersDataTable.Rows[currRowIdx].SetField("Status", status);
             // Sets new requestedDeliveryTime in DataTable if status is 1.
@@ -419,35 +455,9 @@ namespace BackgroundLieferandoApiAsyncRequests
             }
             UpdateDataGridViewSource(GlobalOpenOrdersDataTable);
             UpdateStatusColors();
-
-            Stopwatch sw = new Stopwatch();
-
-            sw.Start();
-
-            // Issue (solved) careful: currRowIdx changes after updating rows with status 4 (Solution: new currentcell rowindex)
-            var success = PostStatusUpdate(buildStatusUpdateObj(DataGridViewFormRequest.CurrentCell.RowIndex, status));
-
-            sw.Stop();
-
-            Console.WriteLine("PostStatusUpdate Elapsed={0}", sw.Elapsed);
-
-
-            // for testing, since takeaway sandbox is currently not avaiable,
-            // so post update status won't work
-            success = true;
-            if (success)
-                // what if status updates at the moment are not possible,
-                // UI should still be working as usual for user?
-                // then it must be internet that has to be checked
-                // or server down, which means no orders possible
-                UpdateButtonsEnableState(status);
-            //else
-            //TODO: messagebox, error handling??
-
+            UpdateButtonsEnableState(status);
 
             return success;
-
-            // TODO: or error handling after call in new method with context to current action?
         }
 
         //f.e.
@@ -463,9 +473,8 @@ namespace BackgroundLieferandoApiAsyncRequests
 
             sw.Start();
 
-            LieferandoStatusUpdates newStatusUpdate = new LieferandoStatusUpdates(); // empty json
-            //TODO issue System.IndexOutOfRangeException: 'An der Position 2 befindet sich keine Zeile.'
-            var currRowData = GlobalOpenOrdersDataTable.Rows[currRowIdx]; // need unknown data in grid
+            LieferandoStatusUpdates newStatusUpdate = new LieferandoStatusUpdates(); // looks like empty json serialization
+            var currRowData = GlobalOpenOrdersDataTable.Rows[currRowIdx]; // need data in open orders data table of selected row
             switch (status)
             {
                 // Status 0: The order was printed by a restaurant. (printed)
@@ -518,8 +527,6 @@ namespace BackgroundLieferandoApiAsyncRequests
 
             sw.Start();
 
-
-            //int status;
             // Iterate through the rows.
             for (int i = 0; i < DataGridViewFormRequest.Rows.Count; i++)
             {
@@ -615,7 +622,7 @@ namespace BackgroundLieferandoApiAsyncRequests
 
         //
         // TODO optimization maybe: handle "ASAP" as other input value,
-        // (SOLVED, already handled in general with this approach, but maybe not the cleanest)
+        // (SOLVED, already handled in general with this approach, but maybe not the cleanest way.)
         //
         // Function to convert various string representations of dates and times to DateTime values.
         // Returns it in format "HH:mm:ss" if timeflag set to "timeonly"
@@ -692,13 +699,15 @@ namespace BackgroundLieferandoApiAsyncRequests
             sf.Dispose();
         }
 
-        //
+        // Complicated!
         // Discussion idea:
         // Checkbox Automatische Statusänderung aktivieren
         // TODO: Automatische Statusänderung nach Schema
         // -> TODO: Schema überlegen.
         // (f.e. Lieferzeit 30, nach 3min Zubereitung starten, nach 10 min Lieferung starten)
         //
+        // call click sender buttons? No, write functionality for the time given
+        // looping through all current Rows updateonlick with each row and update according to a time interval
     }
 }
 
