@@ -1,0 +1,245 @@
+<?xml version="1.0" standalone="yes"?>
+<DocumentElement>
+  <TodaysOpenOrders2021-12-12T12-43-41>
+    <Start>19:15:00</Start>
+    <Ende>19:45:00</Ende>
+    <Name>Pieter Post</Name>
+    <Straße>Brouwerijstraat 10</Straße>
+    <Ort>Enschede</Ort>
+    <Telefon>061234568</Telefon>
+    <Summe>4,00</Summe>
+    <Status>1</Status>
+    <Kasse>1</Kasse>
+    <Datum>04.08.2017</Datum>
+    <PLZ>7523XD</PLZ>
+    <Zusatz>floor:2</Zusatz>
+    <Lieferung>ja</Lieferung>
+    <Lieferkosten>1,00</Lieferkosten>
+    <Rabatt>0,50</Rabatt>
+    <Info>Nicht klingeln bitte</Info>
+    <Bezahlt>ja</Bezahlt>
+    <Produkte xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <Product>
+        <price>2</price>
+        <name>Dikke frieten</name>
+        <count>1</count>
+        <remark>Extra knapperig aub</remark>
+        <id>1</id>
+        <category>Patatten</category>
+        <sideDishes>
+          <SideDish>
+            <price>0</price>
+            <name>Joppiesaus</name>
+            <count>1</count>
+            <id>2</id>
+          </SideDish>
+        </sideDishes>
+      </Product>
+      <Product>
+        <price>1.5</price>
+        <name>Pikanto</name>
+        <count>1</count>
+        <id>3</id>
+        <category>Vleisch</category>
+        <sideDishes />
+      </Product>
+    </Produkte>
+    <Rabattgutscheine xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <Discount>
+        <price>-0.5</price>
+        <name>Weekendactie dikke frieten</name>
+        <count>1</count>
+      </Discount>
+    </Rabattgutscheine>
+    <Key>D41D8CD98F00B204E9800998ECF8427E</Key>
+    <EndDateTime>2017-08-04T19:45:00+02:00</EndDateTime>
+    <Id>cae66b7e-791b-11e7-b4d8-3464a91febf3</Id>
+  </TodaysOpenOrders2021-12-12T12-43-41>
+  <TodaysOpenOrders2021-12-12T12-43-41>
+    <Start>12:45:22</Start>
+    <Ende />
+    <Name>Pieter Post</Name>
+    <Straße>Brouwerijstraat 10</Straße>
+    <Ort>Enschede</Ort>
+    <Telefon>061234568</Telefon>
+    <Summe>34,00</Summe>
+    <Status>0</Status>
+    <Kasse>1</Kasse>
+    <Datum>10.06.2020</Datum>
+    <PLZ>7523XD</PLZ>
+    <Zusatz>floor:2</Zusatz>
+    <Lieferung>ja</Lieferung>
+    <Lieferkosten>0,00</Lieferkosten>
+    <Rabatt>3,00</Rabatt>
+    <Info />
+    <Bezahlt>nein</Bezahlt>
+    <Produkte xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <Product>
+        <price>29</price>
+        <name>Italienischer Abend</name>
+        <count>1</count>
+        <remark />
+        <id>34535</id>
+        <category>Italienischer Abend</category>
+        <sideDishes>
+          <SideDish>
+            <price>1</price>
+            <name>Vegan</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 1</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 2</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 3</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Tomato</name>
+            <count>1</count>
+          </SideDish>
+        </sideDishes>
+      </Product>
+      <Product>
+        <price>5</price>
+        <name>Kebap Dürüm (klein)</name>
+        <count>1</count>
+        <remark />
+        <category>Kebap</category>
+        <sideDishes>
+          <SideDish>
+            <price>0</price>
+            <name>ohne Sauce</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>0</price>
+            <name>mit Weizenbrot</name>
+            <count>1</count>
+          </SideDish>
+        </sideDishes>
+      </Product>
+      <Product>
+        <price>3</price>
+        <name>Apfelsaft</name>
+        <count>1</count>
+        <remark />
+        <id>83</id>
+        <category>Säfte</category>
+        <sideDishes />
+      </Product>
+    </Produkte>
+    <Rabattgutscheine xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <Discount>
+        <price>-3</price>
+        <name>kebab aktion</name>
+        <count>1</count>
+      </Discount>
+    </Rabattgutscheine>
+    <Key>144C8232D8B9FA4AFD8815B9F93909B8</Key>
+    <EndDateTime />
+    <Id>86676377-9eac-420e-a522-458bac02c9be</Id>
+  </TodaysOpenOrders2021-12-12T12-43-41>
+  <TodaysOpenOrders2021-12-12T12-43-41>
+    <Start>12:47:35</Start>
+    <Ende />
+    <Name>Pieter Post</Name>
+    <Straße>Brouwerijstraat 10</Straße>
+    <Ort>Enschede</Ort>
+    <Telefon>061234568</Telefon>
+    <Summe>50,70</Summe>
+    <Status>0</Status>
+    <Kasse>1</Kasse>
+    <Datum>10.06.2020</Datum>
+    <PLZ>7523XD</PLZ>
+    <Zusatz>floor:2</Zusatz>
+    <Lieferung>ja</Lieferung>
+    <Lieferkosten>0,00</Lieferkosten>
+    <Rabatt>0,00</Rabatt>
+    <Info />
+    <Bezahlt>nein</Bezahlt>
+    <Produkte xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+      <Product>
+        <price>16.9</price>
+        <name>Pizza 2</name>
+        <count>1</count>
+        <remark />
+        <category>Pizza</category>
+        <sideDishes>
+          <SideDish>
+            <price>1</price>
+            <name>Vegan</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 1</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 3</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 5</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 8</name>
+            <count>1</count>
+          </SideDish>
+        </sideDishes>
+      </Product>
+      <Product>
+        <price>16.9</price>
+        <name>Pizza 9</name>
+        <count>2</count>
+        <remark />
+        <category>Pizza</category>
+        <sideDishes>
+          <SideDish>
+            <price>1</price>
+            <name>Vegan</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 1</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 5</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 2</name>
+            <count>1</count>
+          </SideDish>
+          <SideDish>
+            <price>2</price>
+            <name>Salad mix 4</name>
+            <count>1</count>
+          </SideDish>
+        </sideDishes>
+      </Product>
+    </Produkte>
+    <Rabattgutscheine xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+    <Key>2FE3D67919A2960FD9474F60E2848F92</Key>
+    <EndDateTime />
+    <Id>b9b2d648-382e-47c4-b717-27b9f07146b1</Id>
+  </TodaysOpenOrders2021-12-12T12-43-41>
+</DocumentElement>

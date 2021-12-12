@@ -2,7 +2,6 @@
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -208,7 +207,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             requestGetOrd.AddHeader("Apikey", apikey); // "abc123"
             requestGetOrd.AddHeader("Authorization", "Basic " + Convert.ToBase64String(byteArray));
 
-            //IRestResponse responseGet = clientGet.Execute(requestGetOrd); // Currently ERROR STATUS CODE 530 // uncomment for re-testing
+            IRestResponse responseGet = clientGet.Execute(requestGetOrd); // Currently ERROR STATUS CODE 530 // uncomment for re-testing
             //if (responseGet.StatusCode != HttpStatusCode.OK) return null; // TODO case: change if response content can be null not empty {}
 
             string json;

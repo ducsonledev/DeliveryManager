@@ -76,15 +76,23 @@ namespace BackgroundLieferandoApiAsyncRequests
             {
                 //MessageBox.Show(e.Error.Message);
                 resultLabel.Text = "Error: " + e.Error.Message;
+                // save orders on error occasion
+                GlobalOpenOrdersDataTable.WriteXml(GlobalOpenOrdersDataTable.TableName + ".xml");
+                GlobalFinishedOrdersDataTable.WriteXml(GlobalFinishedOrdersDataTable.TableName + ".xml");
             }
             if (e.Cancelled == true)
             {
                 resultLabel.Text = "Requests canceled!";
                 resultLabel.ForeColor = Color.Red;
+                //MessageBox.Show("Requests canceled!");
+                // save orders on cancel occasion
+                GlobalOpenOrdersDataTable.WriteXml(GlobalOpenOrdersDataTable.TableName + ".xml");
+                GlobalFinishedOrdersDataTable.WriteXml(GlobalFinishedOrdersDataTable.TableName + ".xml");
             }
             else
             {
                 resultLabel.Text = "Requests completed!";
+                //MessageBox.Show("Requests completed!");
             }
 
             resultLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -321,9 +329,9 @@ namespace BackgroundLieferandoApiAsyncRequests
                 bool success;
                 // for incoming orders that already has requested delivery time, the status 0 and 1 will be send
                 if (statusEncode == 1)
-                    success = PostStatusUpdate(buildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode - 1));
+                    success = PostStatusUpdate(BuildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode - 1));
                 // Post update status for initial incoming orders
-                success = PostStatusUpdate(buildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode));
+                success = PostStatusUpdate(BuildStatusUpdateObj(GlobalOpenOrdersDataTable.Rows.Count - 1, statusEncode));
                 // if not successful, doesn't matter, then we don't send status and keep order in DataTable.
                 // this is just for convenience for real time customer feedback and doesn't actually hinder the full delivery till the door
             }
@@ -425,7 +433,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             sw.Start();
 
             // called with the new current row because the Data Table could have been adjusted in the mean time TODO but status is wrong for current cell
-            bool success = PostStatusUpdate(buildStatusUpdateObj(DataGridViewFormRequest.CurrentCell.RowIndex, status));
+            bool success = PostStatusUpdate(BuildStatusUpdateObj(DataGridViewFormRequest.CurrentCell.RowIndex, status));
 
             sw.Stop();
 
@@ -467,7 +475,7 @@ namespace BackgroundLieferandoApiAsyncRequests
         //      "status": "confirmed_change_delivery_time",
         //      "changedDeliveryTime": "2020-02-04T19:45:00+02:00"
         // }
-        private LieferandoStatusUpdates buildStatusUpdateObj(int currRowIdx, int status)
+        private LieferandoStatusUpdates BuildStatusUpdateObj(int currRowIdx, int status)
         {
             Stopwatch sw = new Stopwatch();
 
@@ -634,7 +642,6 @@ namespace BackgroundLieferandoApiAsyncRequests
                 if (timeflag == "timeonly")
                     return Convert.ToDateTime(value).ToString("HH:mm:ss");
                 else if (timeflag == "lieferando")
-                    // "yyyy'-'MM'-'dd'T'HH':'mm':'ss'zzz" - not working
                     return Convert.ToDateTime(value).ToString("s") + Convert.ToDateTime(value).ToString("zzz");
                 else
                     return Convert.ToDateTime(value).ToString("dd/MM/yyyy HH:mm:ss");
@@ -698,16 +705,6 @@ namespace BackgroundLieferandoApiAsyncRequests
             drawBrush.Dispose();
             sf.Dispose();
         }
-
-        // Complicated!
-        // Discussion idea:
-        // Checkbox Automatische Statusänderung aktivieren
-        // TODO: Automatische Statusänderung nach Schema
-        // -> TODO: Schema überlegen.
-        // (f.e. Lieferzeit 30, nach 3min Zubereitung starten, nach 10 min Lieferung starten)
-        //
-        // call click sender buttons? No, write functionality for the time given
-        // looping through all current Rows updateonlick with each row and update according to a time interval
     }
 }
 

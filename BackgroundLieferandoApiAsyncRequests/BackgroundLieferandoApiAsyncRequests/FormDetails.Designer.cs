@@ -29,8 +29,9 @@ namespace BackgroundLieferandoApiAsyncRequests
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.DataGridViewFormDetails = new System.Windows.Forms.DataGridView();
             this.ArtikelNr = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Bezeichnung = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -74,6 +75,14 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.DataGridViewFormDetails.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.DataGridViewFormDetails.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
             this.DataGridViewFormDetails.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DataGridViewFormDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.DataGridViewFormDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridViewFormDetails.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ArtikelNr,
@@ -82,21 +91,22 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.Preis,
             this.Zusatz});
             this.DataGridViewFormDetails.GridColor = System.Drawing.Color.Black;
-            this.DataGridViewFormDetails.Location = new System.Drawing.Point(-43, 88);
+            this.DataGridViewFormDetails.Location = new System.Drawing.Point(0, 88);
             this.DataGridViewFormDetails.MultiSelect = false;
             this.DataGridViewFormDetails.Name = "DataGridViewFormDetails";
             this.DataGridViewFormDetails.ReadOnly = true;
             this.DataGridViewFormDetails.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            this.DataGridViewFormDetails.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            this.DataGridViewFormDetails.RowHeadersVisible = false;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            this.DataGridViewFormDetails.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.DataGridViewFormDetails.ShowEditingIcon = false;
-            this.DataGridViewFormDetails.Size = new System.Drawing.Size(777, 214);
+            this.DataGridViewFormDetails.Size = new System.Drawing.Size(737, 302);
             this.DataGridViewFormDetails.TabIndex = 0;
             // 
             // ArtikelNr
             // 
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
-            this.ArtikelNr.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            this.ArtikelNr.DefaultCellStyle = dataGridViewCellStyle2;
             this.ArtikelNr.HeaderText = "ArtikelNr";
             this.ArtikelNr.Name = "ArtikelNr";
             this.ArtikelNr.ReadOnly = true;
@@ -334,7 +344,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.ClientSize = new System.Drawing.Size(734, 301);
+            this.ClientSize = new System.Drawing.Size(734, 390);
             this.Controls.Add(this.buttonZurück);
             this.Controls.Add(this.textBoxBezahlt);
             this.Controls.Add(this.labelBezahlt);
