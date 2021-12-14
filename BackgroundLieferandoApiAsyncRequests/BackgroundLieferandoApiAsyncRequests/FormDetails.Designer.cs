@@ -99,6 +99,7 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.DataGridViewFormDetails.RowHeadersVisible = false;
             dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
             this.DataGridViewFormDetails.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            this.DataGridViewFormDetails.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.DataGridViewFormDetails.ShowEditingIcon = false;
             this.DataGridViewFormDetails.Size = new System.Drawing.Size(737, 302);
             this.DataGridViewFormDetails.TabIndex = 0;
@@ -328,9 +329,12 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             // buttonZurück
             // 
-            this.buttonZurück.BackColor = System.Drawing.SystemColors.ButtonShadow;
+            this.buttonZurück.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.buttonZurück.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.buttonZurück.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonZurück.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.buttonZurück.FlatAppearance.BorderSize = 0;
+            this.buttonZurück.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.buttonZurück.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonZurück.Location = new System.Drawing.Point(623, 40);
             this.buttonZurück.Name = "buttonZurück";
             this.buttonZurück.Size = new System.Drawing.Size(90, 42);

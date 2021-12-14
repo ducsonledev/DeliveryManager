@@ -17,8 +17,6 @@ namespace BackgroundLieferandoApiAsyncRequests
         public FormRequest()
         {
             InitializeComponent();
-            backgroundWorker.WorkerReportsProgress = true; // TODO: false? delete line?
-            backgroundWorker.WorkerSupportsCancellation = true; // TODO: false? delete line?
         }
 
         private void backgroundWorker_DoWork(object sender, DoWorkEventArgs e)

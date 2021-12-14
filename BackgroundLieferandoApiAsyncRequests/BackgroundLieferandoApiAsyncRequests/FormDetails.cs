@@ -30,6 +30,11 @@ namespace BackgroundLieferandoApiAsyncRequests
             // No highlighting seen with selection.
             DataGridViewFormDetails.DefaultCellStyle.SelectionBackColor = DataGridViewFormDetails.DefaultCellStyle.BackColor;
             DataGridViewFormDetails.DefaultCellStyle.SelectionForeColor = DataGridViewFormDetails.DefaultCellStyle.ForeColor;
+            // prevent columnheaders from highlighting on mouse over
+            foreach (DataGridViewColumn col in DataGridViewFormDetails.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
         }
 
         private void PopulateDataGridViewProducts(DataTable dt, int currRowIdx)

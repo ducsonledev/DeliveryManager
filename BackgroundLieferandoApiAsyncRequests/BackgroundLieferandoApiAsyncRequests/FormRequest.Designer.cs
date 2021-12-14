@@ -30,8 +30,8 @@ namespace BackgroundLieferandoApiAsyncRequests
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
             this.backgroundWorker = new System.ComponentModel.BackgroundWorker();
             this.btnStart = new System.Windows.Forms.Button();
             this.resultLabel = new System.Windows.Forms.Label();
@@ -130,28 +130,28 @@ namespace BackgroundLieferandoApiAsyncRequests
             this.DataGridViewFormRequest.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.DataGridViewFormRequest.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.Raised;
             this.DataGridViewFormRequest.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DataGridViewFormRequest.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DataGridViewFormRequest.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
             this.DataGridViewFormRequest.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.DataGridViewFormRequest.GridColor = System.Drawing.Color.Black;
             this.DataGridViewFormRequest.Location = new System.Drawing.Point(0, 100);
             this.DataGridViewFormRequest.MultiSelect = false;
             this.DataGridViewFormRequest.Name = "DataGridViewFormRequest";
             this.DataGridViewFormRequest.ReadOnly = true;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.DataGridViewFormRequest.RowHeadersDefaultCellStyle = dataGridViewCellStyle22;
             this.DataGridViewFormRequest.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.DataGridViewFormRequest.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.DataGridViewFormRequest.ShowEditingIcon = false;
@@ -171,13 +171,17 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             // buttonDetails
             // 
-            this.buttonDetails.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonDetails.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.buttonDetails.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.buttonDetails.FlatAppearance.BorderSize = 0;
+            this.buttonDetails.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.buttonDetails.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonDetails.Location = new System.Drawing.Point(8, 17);
             this.buttonDetails.Name = "buttonDetails";
             this.buttonDetails.Size = new System.Drawing.Size(111, 50);
             this.buttonDetails.TabIndex = 13;
             this.buttonDetails.Text = "Details anzeigen";
-            this.buttonDetails.UseVisualStyleBackColor = true;
+            this.buttonDetails.UseVisualStyleBackColor = false;
             this.buttonDetails.Click += new System.EventHandler(this.buttonDetails_Click);
             // 
             // panelLieferzeitSenden
@@ -199,8 +203,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             this.button15min.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.button15min.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.button15min.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
             this.button15min.FlatAppearance.BorderSize = 0;
-            this.button15min.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button15min.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.button15min.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button15min.Location = new System.Drawing.Point(5, 5);
             this.button15min.Margin = new System.Windows.Forms.Padding(0);
             this.button15min.Name = "button15min";
@@ -213,7 +219,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             // button60min
             // 
             this.button60min.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.button60min.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button60min.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.button60min.FlatAppearance.BorderSize = 0;
+            this.button60min.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.button60min.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button60min.Location = new System.Drawing.Point(257, 5);
             this.button60min.Name = "button60min";
             this.button60min.Size = new System.Drawing.Size(58, 58);
@@ -225,7 +234,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             // button45min
             // 
             this.button45min.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.button45min.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button45min.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.button45min.FlatAppearance.BorderSize = 0;
+            this.button45min.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.button45min.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button45min.Location = new System.Drawing.Point(194, 5);
             this.button45min.Name = "button45min";
             this.button45min.Size = new System.Drawing.Size(58, 58);
@@ -237,7 +249,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             // button20min
             // 
             this.button20min.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.button20min.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button20min.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.button20min.FlatAppearance.BorderSize = 0;
+            this.button20min.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.button20min.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button20min.Location = new System.Drawing.Point(68, 5);
             this.button20min.Name = "button20min";
             this.button20min.Size = new System.Drawing.Size(58, 58);
@@ -249,7 +264,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             // button30min
             // 
             this.button30min.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.button30min.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.button30min.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.button30min.FlatAppearance.BorderSize = 0;
+            this.button30min.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.button30min.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button30min.Location = new System.Drawing.Point(131, 5);
             this.button30min.Name = "button30min";
             this.button30min.Size = new System.Drawing.Size(58, 58);
@@ -270,7 +288,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             // buttonZubereitungStart
             // 
             this.buttonZubereitungStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.buttonZubereitungStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonZubereitungStart.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.buttonZubereitungStart.FlatAppearance.BorderSize = 0;
+            this.buttonZubereitungStart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.buttonZubereitungStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonZubereitungStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonZubereitungStart.Location = new System.Drawing.Point(457, 18);
             this.buttonZubereitungStart.Name = "buttonZubereitungStart";
@@ -285,7 +306,10 @@ namespace BackgroundLieferandoApiAsyncRequests
             // buttonLieferungStart
             // 
             this.buttonLieferungStart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.buttonLieferungStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.buttonLieferungStart.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.buttonLieferungStart.FlatAppearance.BorderSize = 0;
+            this.buttonLieferungStart.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.buttonLieferungStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonLieferungStart.Location = new System.Drawing.Point(589, 18);
             this.buttonLieferungStart.Name = "buttonLieferungStart";
             this.buttonLieferungStart.Size = new System.Drawing.Size(126, 68);
@@ -298,8 +322,11 @@ namespace BackgroundLieferandoApiAsyncRequests
             // 
             // buttonLieferungAbschließen
             // 
-            this.buttonLieferungAbschließen.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.buttonLieferungAbschließen.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.buttonLieferungAbschließen.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.buttonLieferungAbschließen.FlatAppearance.BorderColor = System.Drawing.Color.RoyalBlue;
+            this.buttonLieferungAbschließen.FlatAppearance.BorderSize = 0;
+            this.buttonLieferungAbschließen.FlatAppearance.MouseOverBackColor = System.Drawing.Color.LightCyan;
+            this.buttonLieferungAbschließen.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonLieferungAbschließen.Location = new System.Drawing.Point(721, 18);
             this.buttonLieferungAbschließen.Name = "buttonLieferungAbschließen";
             this.buttonLieferungAbschließen.Size = new System.Drawing.Size(126, 68);
