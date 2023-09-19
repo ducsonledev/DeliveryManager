@@ -1,6 +1,6 @@
-### About The Project
+## About The Project
 
-## DeliveryManager
+### DeliveryManager
 
 Background application for requesting and visualising orders from Lieferando API in realtime. 
 With realtime status updates and confirming delivery when it will arrive.
